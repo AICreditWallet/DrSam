@@ -1,2 +1,7 @@
-NEXT_PUBLIC_SUPABASE_URL=https://sfzkzrgqdxjleujnfvbg.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmemt6cmdxZHhqbGV1am5mdmJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMyMjM1MTMsImV4cCI6MjA3ODc5OTUxM30.mJMKyyMkdNOU6ZkCbJLQrKU28tA6mfnPCNnwvcNWQHY
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  reactStrictMode: true,
+};
+
+export default nextConfig;
