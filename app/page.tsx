@@ -38,9 +38,6 @@ export default function Home() {
           <section className="hero-block">
             <p className="eyebrow">Today</p>
             <h1 className="hero-heading">See a UK doctor in minutes.</h1>
-            <p className="hero-text">
-              Simple, safe access to real doctors by chat or video.
-            </p>
 
             <div className="chip-row">
               <span className="chip">GP</span>
@@ -62,10 +59,13 @@ export default function Home() {
             <div className="doctor-scroll">
               {doctors.map((doc) => (
                 <article className="doctor-card" key={doc.id}>
-                  <div className="doctor-avatar">
-                    <span>{doc.initials}</span>
+                  <div className="doctor-photo">
+                    <div className="doctor-avatar-large">
+                      <span>{doc.initials}</span>
+                    </div>
                   </div>
-                  <div className="doctor-overlay">
+
+                  <div className="doctor-footer">
                     <span className="doctor-tag">{doc.tag}</span>
                     <span className="doctor-locked">
                       Sign in to view details
@@ -76,14 +76,13 @@ export default function Home() {
             </div>
           </section>
 
-          {/* info bubble */}
+          {/* info bubble (short) */}
           <section className="info-card">
             <div className="info-dot" />
             <div>
               <p className="info-title">How it works</p>
               <p className="info-text">
-                Tell Dr. Sam what’s wrong, we match you to the right UK-registered
-                doctor. Your details stay private and secure.
+                Tell Dr. Sam what’s wrong and we match you with the right doctor.
               </p>
             </div>
           </section>
@@ -95,7 +94,7 @@ export default function Home() {
         <div className="bottom-inner">
           <button className="btn-emergency" type="button">
             <span className="emergency-dot" />
-            <span>Emergency? Call 999 / NHS 111</span>
+            <span>Emergency</span>
           </button>
 
           <button className="btn-book" type="button">
