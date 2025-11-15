@@ -1,24 +1,25 @@
 const doctors = [
-  { id: 1 },
-  { id: 2 },
-  { id: 3 },
-  { id: 4 },
-  { id: 5 },
+  { id: 1, initials: "AK", tag: "GP" },
+  { id: 2, initials: "JW", tag: "Derm" },
+  { id: 3, initials: "RM", tag: "Mental" },
+  { id: 4, initials: "LS", tag: "Peds" },
+  { id: 5, initials: "TT", tag: "GP" },
 ];
 
 export default function Home() {
   return (
-    <div className="page">
-      <div className="shell">
-        {/* Top bar */}
+    <div className="app-root">
+      {/* main glass card */}
+      <div className="app-shell">
+        {/* top bar */}
         <header className="topbar">
           <div className="brand">
             <div className="logo-circle" aria-hidden="true">
               ☺
             </div>
             <div>
-              <div className="brand-text-main">Dr. Sam</div>
-              <div className="brand-text-sub">Talk to real UK doctors</div>
+              <div className="brand-title">Dr. Sam</div>
+              <div className="brand-subtitle">Hello, let’s get you seen</div>
             </div>
           </div>
 
@@ -32,57 +33,72 @@ export default function Home() {
           </div>
         </header>
 
-        {/* Hero */}
-        <main className="hero-minimal">
-          <div className="hero-title-group">
-            <div className="eyebrow">Dr. Sam</div>
-            <h1 className="hero-title">See a doctor in minutes.</h1>
-            <p className="hero-subtitle">
-              Simple, safe access to UK-registered doctors from your phone.
+        {/* hero section */}
+        <main className="home-main">
+          <section className="hero-block">
+            <p className="eyebrow">Today</p>
+            <h1 className="hero-heading">See a UK doctor in minutes.</h1>
+            <p className="hero-text">
+              Simple, safe access to real doctors by chat or video.
             </p>
-          </div>
 
-          {/* Pills */}
-          <div className="hero-pills">
-            <span className="pill">NHS-grade doctors</span>
-            <span className="pill">Secure chat & video</span>
-            <span className="pill">24/7 triage</span>
-          </div>
+            <div className="chip-row">
+              <span className="chip">GP</span>
+              <span className="chip">Mental health</span>
+              <span className="chip">Women’s health</span>
+            </div>
+          </section>
 
-          {/* Horizontal doctor strip */}
+          {/* doctor carousel */}
           <section
-            className="doctor-strip"
-            aria-label="Browse available doctors"
+            className="doctor-section"
+            aria-label="Available doctors preview"
           >
-            <div className="doctor-strip-header">
-              <span className="strip-title">Available doctors</span>
-              <span className="strip-hint">Scroll to browse</span>
+            <div className="section-header">
+              <span className="section-title">Available now</span>
+              <span className="section-link">Sign in to see all</span>
             </div>
 
-            <div className="doctor-list">
-              {doctors.map((doctor) => (
-                <article className="doctor-card" key={doctor.id}>
-                  <div className="doctor-photo" />
-                  <div className="doctor-info-locked">
-                    <span className="lock-dot" />
-                    <span className="lock-text">Sign in to view details</span>
+            <div className="doctor-scroll">
+              {doctors.map((doc) => (
+                <article className="doctor-card" key={doc.id}>
+                  <div className="doctor-avatar">
+                    <span>{doc.initials}</span>
+                  </div>
+                  <div className="doctor-overlay">
+                    <span className="doctor-tag">{doc.tag}</span>
+                    <span className="doctor-locked">
+                      Sign in to view details
+                    </span>
                   </div>
                 </article>
               ))}
             </div>
           </section>
+
+          {/* info bubble */}
+          <section className="info-card">
+            <div className="info-dot" />
+            <div>
+              <p className="info-title">How it works</p>
+              <p className="info-text">
+                Tell Dr. Sam what’s wrong, we match you to the right UK-registered
+                doctor. Your details stay private and secure.
+              </p>
+            </div>
+          </section>
         </main>
       </div>
 
-      {/* Fixed bottom bar */}
-      <div className="bottom-fixed-bar">
-        <div className="bottom-fixed-inner">
+      {/* fixed bottom bar (web-app style) */}
+      <div className="bottom-fixed">
+        <div className="bottom-inner">
           <button className="btn-emergency" type="button">
-            <span className="icon-dot" />
+            <span className="emergency-dot" />
             <span>Emergency? Call 999 / NHS 111</span>
           </button>
 
-          <button className="btn-appointment" type="button">
+          <button className="btn-book" type="button">
             Book an appointment
           </button>
         </div>
