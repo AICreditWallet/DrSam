@@ -30,29 +30,35 @@ body {
   color: var(--text-main);
 }
 
-/* root layout */
 .app-root {
   min-height: 100vh;
+  width: 100%;
+  padding: 0; /* remove padding */
+  margin: 0;
   display: flex;
-  justify-content: center;
-  padding: 1.4rem;
-  padding-bottom: 5.6rem; /* space for fixed bar */
+  flex-direction: column;
+  background:
+    radial-gradient(circle at top left, #d8d4ff, transparent 55%),
+    radial-gradient(circle at bottom right, #c7ecff, transparent 55%),
+    #f5f3ff;
 }
 
 .app-shell {
   width: 100%;
-  max-width: 480px;
-  border-radius: var(--radius-xl);
-  background: #fefefe;
-  box-shadow: var(--shadow-soft);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  height: auto;
+  min-height: 100vh;
+  background: #ffffff;
+  border-radius: 0;
+  box-shadow: none;
+  overflow-x: hidden;
 }
+
 
 /* header hero */
 .header-hero {
   padding: 1.2rem 1.5rem 1.6rem;
+  width: 100%;
+  border-radius: 0 0 40px 40px;
   background:
     radial-gradient(circle at top left, #fef3ff 0, transparent 55%),
     radial-gradient(circle at bottom right, #c7e0ff 0, transparent 55%),
@@ -248,10 +254,9 @@ body {
 /* horizontal cards */
 .doctor-scroll {
   display: flex;
-  gap: 0.9rem;
+  gap: 1rem;
+  padding: 0.5rem 1rem 0.5rem;
   overflow-x: auto;
-  padding-bottom: 0.4rem;
-  -webkit-overflow-scrolling: touch;
   scroll-snap-type: x mandatory;
 }
 
@@ -265,17 +270,20 @@ body {
 }
 
 .doctor-card {
-  flex: 0 0 190px;
-  height: 240px;
-  border-radius: 26px;
-  background: var(--card);
+  flex: 0 0 70%; /* mobile width */
+  max-width: 340px;
+  height: 260px;
+  border-radius: 30px;
+  background: #ffffff;
   border: 1px solid var(--border-soft);
-  box-shadow: 0 16px 40px rgba(148, 163, 184, 0.35);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  box-shadow: 0 10px 40px rgba(148, 163, 184, 0.35);
   scroll-snap-align: start;
-  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .doctor-card {
+    flex: 0 0 280px; /* desktop grid style */
+  }
 }
 
 /* top image area */
@@ -366,36 +374,28 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 0.7rem 1.4rem calc(1rem + env(safe-area-inset-bottom));
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
   display: flex;
   justify-content: center;
-  pointer-events: none;
+  z-index: 999;
 }
 
 .bottom-inner {
   width: 100%;
-  max-width: 480px;
+  max-width: 900px;
   display: flex;
-  gap: 0.7rem;
-  pointer-events: auto;
+  gap: 0.8rem;
 }
 
 .btn-emergency,
 .btn-book {
-  flex: 1 1 0;
+  flex: 1;
   border-radius: 999px;
-  padding: 0.75rem 1rem;
-  font-size: 0.88rem;
-  font-weight: 600;
-  border: 1px solid transparent;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast),
-    background var(--transition-fast), border-color var(--transition-fast);
+  padding: 1rem 1.2rem;
 }
+
 
 .btn-emergency {
   max-width: 220px;
