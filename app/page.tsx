@@ -9,44 +9,51 @@ const doctors = [
 export default function Home() {
   return (
     <div className="app-root">
-      {/* main glass card */}
       <div className="app-shell">
-        {/* top bar */}
-        <header className="topbar">
-          <div className="brand">
-            <div className="logo-circle" aria-hidden="true">
-              ☺
+        {/* Top gradient header */}
+        <header className="header-hero">
+          <div className="header-top">
+            <div className="brand">
+              <div className="logo-circle" aria-hidden="true">
+                ☺
+              </div>
+              <div>
+                <div className="brand-title">Dr. Sam</div>
+                <div className="brand-subtitle">Hello, let’s get you seen</div>
+              </div>
             </div>
-            <div>
-              <div className="brand-title">Dr. Sam</div>
-              <div className="brand-subtitle">Hello, let’s get you seen</div>
+
+            <div className="auth-buttons">
+              <button className="btn btn-ghost" type="button">
+                Sign in
+              </button>
+              <button className="btn btn-primary" type="button">
+                Sign up
+              </button>
             </div>
           </div>
 
-          <div className="auth-buttons">
-            <button className="btn btn-ghost" type="button">
-              Sign in
-            </button>
-            <button className="btn btn-primary" type="button">
-              Sign up
+          <div className="hero-text-block">
+            <p className="eyebrow">Today</p>
+            <h1 className="hero-heading">See a UK doctor in minutes.</h1>
+
+            <button className="hero-prompt" type="button">
+              <span className="hero-emoji">🙂</span>
+              <span>How are you feeling today?</span>
             </button>
           </div>
         </header>
 
-        {/* hero section */}
+        {/* Main content */}
         <main className="home-main">
-          <section className="hero-block">
-            <p className="eyebrow">Today</p>
-            <h1 className="hero-heading">See a UK doctor in minutes.</h1>
+          {/* Tags */}
+          <div className="chip-row">
+            <span className="chip chip-active">GP</span>
+            <span className="chip">Mental health</span>
+            <span className="chip">Women’s health</span>
+          </div>
 
-            <div className="chip-row">
-              <span className="chip">GP</span>
-              <span className="chip">Mental health</span>
-              <span className="chip">Women’s health</span>
-            </div>
-          </section>
-
-          {/* doctor carousel */}
+          {/* Doctors row */}
           <section
             className="doctor-section"
             aria-label="Available doctors preview"
@@ -76,20 +83,20 @@ export default function Home() {
             </div>
           </section>
 
-          {/* info bubble (short) */}
+          {/* How it works card – short text */}
           <section className="info-card">
             <div className="info-dot" />
             <div>
               <p className="info-title">How it works</p>
               <p className="info-text">
-                Tell Dr. Sam what’s wrong and we match you with the right doctor.
+                Describe your symptoms, we match you with the right doctor.
               </p>
             </div>
           </section>
         </main>
       </div>
 
-      {/* fixed bottom bar (web-app style) */}
+      {/* Fixed bottom actions */}
       <div className="bottom-fixed">
         <div className="bottom-inner">
           <button className="btn-emergency" type="button">
