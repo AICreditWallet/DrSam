@@ -14,9 +14,12 @@ export default function Home() {
         <header className="header-hero">
           <div className="header-top">
             <div className="brand">
-              <div className="logo-circle" aria-hidden="true">
-                ☺
-              </div>
+             <img
+  src="/logo.svg"
+  alt="Dr. Sam Logo"
+  className="logo-image"
+/>
+
               <div>
                 <div className="brand-title">Dr. Sam</div>
                 <div className="brand-subtitle">Hello, let’s get you seen</div>
