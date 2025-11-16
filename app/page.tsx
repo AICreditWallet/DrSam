@@ -40,9 +40,10 @@ export default function Home() {
               <button className="btn btn-ghost" type="button">
                 Sign in
               </button>
-              <Link href="/create-account" className="btn btn-primary">
+              <Link href="/create-account" className="btn-primary no-underline">
   Create account
 </Link>
+
 
             </div>
           </div>
