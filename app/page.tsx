@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 
-
 const doctors = [
   { id: 1, initials: "AK", tag: "GP" },
   { id: 2, initials: "JW", tag: "Derm" },
@@ -18,8 +17,8 @@ export default function Home() {
         {/* Top gradient header */}
         <header className="header-hero">
           <div className="header-top">
+            {/* Brand + logo */}
             <div className="brand">
-              {/* Logo */}
               <div className="logo-wrapper">
                 <Image
                   src="/logo.png" // make sure public/logo.png exists
@@ -32,24 +31,25 @@ export default function Home() {
 
               <div>
                 <div className="brand-title">Dr. Sam</div>
-                <div className="brand-subtitle">Your personal doctor</div>
+                <div className="brand-subtitle">Hello, let’s get you seen</div>
               </div>
             </div>
 
-            <div className="auth-buttons">
-              <button className="btn btn-ghost" type="button">
+            {/* Top-right buttons */}
+            <div className="top-buttons">
+              <Link href="/signin" className="btn-outline">
                 Sign in
-              </button>
-              <Link href="/create-account" className="btn-primary no-underline">
-  Create account
-</Link>
+              </Link>
 
-
+              <Link href="/create-account" className="btn-filled">
+                Create account
+              </Link>
             </div>
           </div>
 
           <div className="hero-text-block">
-            <h1 className="hero-heading">Consult a doctor instantly.</h1>
+            <p className="eyebrow">Today</p>
+            <h1 className="hero-heading">See a UK doctor in minutes.</h1>
 
             <button className="hero-prompt" type="button">
               <span className="hero-emoji">🙂</span>
