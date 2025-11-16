@@ -1,4 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
+
 
 const doctors = [
   { id: 1, initials: "AK", tag: "GP" },
@@ -38,9 +40,10 @@ export default function Home() {
               <button className="btn btn-ghost" type="button">
                 Sign in
               </button>
-              <button className="btn btn-primary" type="button">
-                Create account
-              </button>
+              <Link href="/create-account" className="btn btn-primary">
+  Create account
+</Link>
+
             </div>
           </div>
 
