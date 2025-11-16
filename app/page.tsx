@@ -15,10 +15,11 @@ export default function Home() {
           <div className="header-top">
             <div className="brand">
              <img
-  src="/logo.svg"
+  src="/logo.png"  // or /logo.svg if using svg
   alt="Dr. Sam Logo"
   className="logo-image"
 />
+
 
               <div>
                 <div className="brand-title">Dr. Sam</div>
