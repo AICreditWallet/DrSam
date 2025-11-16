@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const doctors = [
   { id: 1, initials: "AK", tag: "GP" },
   { id: 2, initials: "JW", tag: "Derm" },
@@ -9,17 +11,22 @@ const doctors = [
 export default function Home() {
   return (
     <div className="app-root">
+      {/* Main shell */}
       <div className="app-shell">
         {/* Top gradient header */}
         <header className="header-hero">
           <div className="header-top">
             <div className="brand">
-             <img
-  src="/logo.png"  // or /logo.svg if using svg
-  alt="Dr. Sam Logo"
-  className="logo-image"
-/>
-
+              {/* Logo */}
+              <div className="logo-wrapper">
+                <Image
+                  src="/logo.png" // <-- make sure public/logo.png exists
+                  alt="Dr. Sam Logo"
+                  width={44}
+                  height={44}
+                  className="logo-image"
+                />
+              </div>
 
               <div>
                 <div className="brand-title">Dr. Sam</div>
@@ -50,7 +57,7 @@ export default function Home() {
 
         {/* Main content */}
         <main className="home-main">
-          {/* Tags */}
+          {/* Category chips */}
           <div className="chip-row">
             <span className="chip chip-active">GP</span>
             <span className="chip">Mental health</span>
@@ -87,7 +94,7 @@ export default function Home() {
             </div>
           </section>
 
-          {/* How it works card – short text */}
+          {/* How it works */}
           <section className="info-card">
             <div className="info-dot" />
             <div>
@@ -100,7 +107,7 @@ export default function Home() {
         </main>
       </div>
 
-      {/* Fixed bottom actions */}
+      {/* Fixed bottom buttons */}
       <div className="bottom-fixed">
         <div className="bottom-inner">
           <button className="btn-emergency" type="button">
