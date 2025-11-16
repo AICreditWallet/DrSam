@@ -39,10 +39,10 @@ export default function CreateAccount() {
             {/* Patient card */}
             <Link href="/signup/patient" className="account-card">
               <div className="account-chip">For you</div>
-              <div className="account-emoji">🧑‍🦽</div>
+              <div className="account-emoji">🧑</div>
               <h2 className="account-card-title">Patient</h2>
               <p className="account-card-text">
-                Book appointments, chat with doctors, and manage your health in
+                Book appointments, Video chat with doctors, and manage your health in
                 one place.
               </p>
               <span className="account-card-cta">Continue as patient →</span>
