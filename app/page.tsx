@@ -20,10 +20,10 @@ export default function Home() {
               {/* Logo */}
               <div className="logo-wrapper">
                 <Image
-                  src="/logo.png" // <-- make sure public/logo.png exists
+                  src="/logo.png" // make sure public/logo.png exists
                   alt="Dr. Sam Logo"
-                  width={44}
-                  height={44}
+                  width={56}
+                  height={56}
                   className="logo-image"
                 />
               </div>
@@ -39,7 +39,7 @@ export default function Home() {
                 Sign in
               </button>
               <button className="btn btn-primary" type="button">
-                Sign up
+                Create account
               </button>
             </div>
           </div>
