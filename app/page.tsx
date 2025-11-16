@@ -45,7 +45,6 @@ export default function Home() {
           </div>
 
           <div className="hero-text-block">
-            <p className="eyebrow">Today</p>
             <h1 className="hero-heading">Consult a doctor instantly.</h1>
 
             <button className="hero-prompt" type="button">
