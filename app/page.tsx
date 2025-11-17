@@ -31,7 +31,7 @@ export default function Home() {
 
               <div>
                 <div className="brand-title">Dr. Sam</div>
-                <div className="brand-subtitle">Hello, let’s get you seen</div>
+                <div className="brand-subtitle">Your personal Doctor</div>
               </div>
             </div>
 
@@ -48,8 +48,8 @@ export default function Home() {
           </div>
 
           <div className="hero-text-block">
-            <p className="eyebrow">Today</p>
-            <h1 className="hero-heading">See a UK doctor in minutes.</h1>
+            
+            <h1 className="hero-heading">Consult a doctor instantly.</h1>
 
             <button className="hero-prompt" type="button">
               <span className="hero-emoji">🙂</span>
