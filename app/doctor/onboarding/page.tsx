@@ -4,6 +4,8 @@ import { useEffect, useState, FormEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
+
 
 // ===== Config =====
 
@@ -89,6 +91,7 @@ function FeeSelect({ label, options, value, onChange }: FeeSelectProps) {
   );
 }
 export default function DoctorOnboarding() {
+  const router = useRouter();
   const [fullName, setFullName] = useState("");
   const [gmcNumber, setGmcNumber] = useState("");
 
@@ -312,6 +315,9 @@ export default function DoctorOnboarding() {
       }
 
       setStatus("Profile saved! You’re ready to start using Dr. Sam.");
+// send them to their dashboard
+router.push("/doctor/dashboard");
+
     } catch (err) {
       console.error(err);
       setError("Something went wrong. Please try again.");

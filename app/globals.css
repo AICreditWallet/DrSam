@@ -1184,3 +1184,389 @@ body {
 .fake-select-option:hover {
   background: rgba(129, 140, 248, 0.06);
 }
+/* ===== Doctor dashboard layout ===== */
+
+.dash-root {
+  min-height: 100vh;
+  background: radial-gradient(circle at top left, #e0e7ff, #f9fafb);
+  padding: 1rem;
+}
+
+.dash-shell {
+  max-width: 1120px;
+  margin: 0 auto;
+  background: linear-gradient(145deg, #f9fafb, #eef2ff);
+  border-radius: 1.75rem;
+  padding: 1.2rem 1.1rem 1.6rem;
+  box-shadow: 0 26px 60px rgba(15, 23, 42, 0.18);
+}
+
+@media (min-width: 768px) {
+  .dash-shell {
+    padding: 1.6rem 1.8rem 2rem;
+  }
+}
+
+.dash-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.4rem;
+}
+
+@media (min-width: 768px) {
+  .dash-header {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.dash-header-left {
+  display: flex;
+  gap: 0.9rem;
+  align-items: center;
+}
+
+.dash-avatar-wrapper {
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  box-shadow: 0 10px 26px rgba(148, 163, 184, 0.4);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dash-avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dash-avatar-placeholder {
+  font-size: 1.6rem;
+}
+
+.dash-eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #9ca3af;
+  margin-bottom: 0.1rem;
+}
+
+.dash-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.dash-subtitle {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.dash-header-actions {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.dash-primary-button,
+.dash-secondary-button,
+.dash-ghost-button {
+  border-radius: 999px;
+  padding: 0.45rem 0.95rem;
+  font-size: 0.8rem;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.dash-primary-button {
+  background: linear-gradient(135deg, #6366f1, #3b82f6);
+  color: #f9fafb;
+  box-shadow: 0 14px 30px rgba(79, 70, 229, 0.4);
+}
+
+.dash-ghost-button {
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  background: rgba(255, 255, 255, 0.9);
+  color: #111827;
+}
+
+.dash-secondary-button {
+  border: 1px solid rgba(79, 70, 229, 0.4);
+  background: rgba(255, 255, 255, 0.95);
+  color: #4f46e5;
+}
+
+/* Grid */
+
+.dash-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.dash-grid {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.dash-grid-2 {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.dash-grid-3 {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 900px) {
+  .dash-grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .dash-grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Cards */
+
+.dash-card {
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 1.25rem;
+  padding: 0.85rem 0.9rem;
+  box-shadow: 0 14px 30px rgba(148, 163, 184, 0.25);
+}
+
+.dash-card-highlight {
+  background: linear-gradient(135deg, #eef2ff, #e0f2fe);
+}
+
+.dash-card-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #9ca3af;
+  margin-bottom: 0.25rem;
+}
+
+.dash-card-main {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.dash-card-sub {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-top: 0.15rem;
+}
+
+.dash-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.dash-card-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.dash-link-button {
+  border: none;
+  background: transparent;
+  font-size: 0.78rem;
+  color: #4f46e5;
+  cursor: pointer;
+}
+
+/* Pills / tags */
+
+.dash-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.7rem;
+  background: rgba(129, 140, 248, 0.12);
+  color: #4338ca;
+}
+
+.dash-pill.small {
+  padding-inline: 0.5rem;
+}
+
+.dash-pill.muted {
+  background: rgba(148, 163, 184, 0.18);
+  color: #4b5563;
+}
+
+/* Lists */
+
+.dash-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-top: 0.35rem;
+}
+
+.dash-divider {
+  height: 1px;
+  background: rgba(209, 213, 219, 0.8);
+  margin: 0.55rem 0;
+}
+
+/* Notifications */
+
+.dash-notif-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.55rem 0.55rem;
+  border-radius: 0.9rem;
+  background: rgba(248, 250, 252, 0.9);
+}
+
+.dash-notif-emergency {
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  background: rgba(254, 242, 242, 0.95);
+}
+
+.dash-notif-main {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.dash-notif-sub {
+  font-size: 0.8rem;
+  color: #4b5563;
+}
+
+.dash-notif-time {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 0.1rem;
+}
+
+.dash-notif-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.dash-notif-button {
+  border-radius: 999px;
+  border: none;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.7rem;
+  cursor: pointer;
+}
+
+.dash-notif-button.decline {
+  background: rgba(248, 250, 252, 1);
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  color: #4b5563;
+}
+
+.dash-notif-button.accept {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #f9fafb;
+}
+
+/* Appointments */
+
+.dash-appointment-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.6rem;
+  border-radius: 0.9rem;
+  background: rgba(249, 250, 251, 0.98);
+}
+
+.dash-apt-main {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.dash-apt-sub {
+  font-size: 0.78rem;
+  color: #4b5563;
+}
+
+.dash-apt-time {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+/* Inbox */
+
+.dash-message-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  padding: 0.5rem 0.55rem;
+  border-radius: 0.9rem;
+  background: rgba(248, 250, 252, 0.95);
+}
+
+.dash-message-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: #e0e7ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #3730a3;
+}
+
+.dash-message-main {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.dash-message-sub {
+  font-size: 0.78rem;
+  color: #4b5563;
+}
+
+.dash-message-time {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 0.05rem;
+}
+
+/* Payouts grid */
+
+.dash-payouts-grid {
+  display: grid;
+  gap: 0.7rem;
+}
+
+@media (min-width: 768px) {
+  .dash-payouts-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.dash-payout-card {
+  border-radius: 1rem;
+  background: rgba(248, 250, 252, 0.96);
+  padding: 0.55rem 0.6rem;
+}
