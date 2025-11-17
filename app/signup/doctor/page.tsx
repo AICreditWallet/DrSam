@@ -3,7 +3,7 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { supabase } from "@/lib/supabase"; // uses your existing Supabase client
+import { supabase } from "@/lib/supabase";
 
 export default function DoctorSignup() {
   const [email, setEmail] = useState("");
@@ -25,12 +25,20 @@ export default function DoctorSignup() {
     try {
       setIsLoading(true);
 
+      // Build redirect URL based on where the user is
+      // - On localhost it becomes: http://localhost:3000/signup/doctor/complete
+      // - On live it becomes: https://drsam.vercel.app/signup/doctor/complete
+      const redirectTo =
+        typeof window !== "undefined"
+          ? `${window.location.origin}/signup/doctor/complete`
+          : undefined;
+
       const { error: signUpError } = await supabase.auth.signUp({
         email,
         password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/signup/doctor/complete`,
-        },
+        options: redirectTo
+          ? { emailRedirectTo: redirectTo }
+          : undefined,
       });
 
       if (signUpError) {
@@ -39,7 +47,7 @@ export default function DoctorSignup() {
       }
 
       setMessage(
-        "Check your email to verify your account. Then come back here to finish your registration."
+        "Check your email for a verification link. After confirming, you'll be brought back to Dr. Sam to finish your setup."
       );
     } catch (err) {
       console.error(err);
