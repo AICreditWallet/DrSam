@@ -44,7 +44,50 @@ const WEEKEND_NIGHT_FEES = [
 const EMERGENCY_FEES = ["£125/h", "£210/h", "£350/h", "£450/h"];
 
 // ===== Component =====
+type FeeSelectProps = {
+  label: string;
+  options: string[];
+  value: string;
+  onChange: (value: string) => void;
+};
 
+function FeeSelect({ label, options, value, onChange }: FeeSelectProps) {
+  const [open, setOpen] = useState(false);
+
+  function handleSelect(option: string) {
+    onChange(option);
+    setOpen(false);
+  }
+
+  return (
+    <div className="fake-select">
+      <div className="fees-label">{label}</div>
+      <button
+        type="button"
+        className="fake-select-button"
+        onClick={() => setOpen((o) => !o)}
+      >
+        {value || "Select fee…"}
+        <span className="fake-select-chevron">▾</span>
+      </button>
+
+      {open && (
+        <div className="fake-select-list">
+          {options.map((opt) => (
+            <button
+              key={opt}
+              type="button"
+              className="fake-select-option"
+              onClick={() => handleSelect(opt)}
+            >
+              {opt}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 export default function DoctorOnboarding() {
   const [fullName, setFullName] = useState("");
   const [gmcNumber, setGmcNumber] = useState("");
@@ -485,120 +528,50 @@ export default function DoctorOnboarding() {
               </div>
             </div>
 
-            {/* Fees as pill selectors */}
-            <div className="auth-label">
-              <div className="auth-label-title">Service fees</div>
-              <p className="auth-label-sub">
-                Choose your usual hourly rates. You can refine this later.
-              </p>
+            {/* Fees as custom dropdowns */}
+<div className="auth-label">
+  <div className="auth-label-title">Service fees</div>
+  <p className="auth-label-sub">
+    Choose your usual hourly rates. You can refine this later.
+  </p>
 
-              <div className="fees-grid">
-                <div className="fees-item">
-                  <div className="fees-label">Weekdays 08:00–19:00</div>
-                  <div className="pill-row">
-                    {WEEKDAY_DAY_FEES.map((f) => {
-                      const selected = feeWeekdayDay === f;
-                      return (
-                        <button
-                          key={f}
-                          type="button"
-                          className={`pill ${
-                            selected ? "pill-selected" : ""
-                          }`}
-                          onClick={() => setFeeWeekdayDay(f)}
-                        >
-                          {f}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
+  <div className="fees-grid">
+    <FeeSelect
+      label="Weekdays 08:00–19:00"
+      options={WEEKDAY_DAY_FEES}
+      value={feeWeekdayDay}
+      onChange={setFeeWeekdayDay}
+    />
 
-                <div className="fees-item">
-                  <div className="fees-label">Weekdays 19:00–08:00</div>
-                  <div className="pill-row">
-                    {WEEKDAY_NIGHT_FEES.map((f) => {
-                      const selected = feeWeekdayNight === f;
-                      return (
-                        <button
-                          key={f}
-                          type="button"
-                          className={`pill ${
-                            selected ? "pill-selected" : ""
-                          }`}
-                          onClick={() => setFeeWeekdayNight(f)}
-                        >
-                          {f}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
+    <FeeSelect
+      label="Weekdays 19:00–08:00"
+      options={WEEKDAY_NIGHT_FEES}
+      value={feeWeekdayNight}
+      onChange={setFeeWeekdayNight}
+    />
 
-                <div className="fees-item">
-                  <div className="fees-label">Weekends 07:00–19:00</div>
-                  <div className="pill-row">
-                    {WEEKEND_DAY_FEES.map((f) => {
-                      const selected = feeWeekendDay === f;
-                      return (
-                        <button
-                          key={f}
-                          type="button"
-                          className={`pill ${
-                            selected ? "pill-selected" : ""
-                          }`}
-                          onClick={() => setFeeWeekendDay(f)}
-                        >
-                          {f}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
+    <FeeSelect
+      label="Weekends 07:00–19:00"
+      options={WEEKEND_DAY_FEES}
+      value={feeWeekendDay}
+      onChange={setFeeWeekendDay}
+    />
 
-                <div className="fees-item">
-                  <div className="fees-label">Weekends 19:00–07:00</div>
-                  <div className="pill-row">
-                    {WEEKEND_NIGHT_FEES.map((f) => {
-                      const selected = feeWeekendNight === f;
-                      return (
-                        <button
-                          key={f}
-                          type="button"
-                          className={`pill ${
-                            selected ? "pill-selected" : ""
-                          }`}
-                          onClick={() => setFeeWeekendNight(f)}
-                        >
-                          {f}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
+    <FeeSelect
+      label="Weekends 19:00–07:00"
+      options={WEEKEND_NIGHT_FEES}
+      value={feeWeekendNight}
+      onChange={setFeeWeekendNight}
+    />
 
-                <div className="fees-item">
-                  <div className="fees-label">Home visit / Emergency</div>
-                  <div className="pill-row">
-                    {EMERGENCY_FEES.map((f) => {
-                      const selected = feeEmergency === f;
-                      return (
-                        <button
-                          key={f}
-                          type="button"
-                          className={`pill ${
-                            selected ? "pill-selected" : ""
-                          }`}
-                          onClick={() => setFeeEmergency(f)}
-                        >
-                          {f}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            </div>
+    <FeeSelect
+      label="Home visit / Emergency"
+      options={EMERGENCY_FEES}
+      value={feeEmergency}
+      onChange={setFeeEmergency}
+    />
+  </div>
+</div>
 
             {error && <p className="auth-error">{error}</p>}
             {status && <p className="auth-message">{status}</p>}
