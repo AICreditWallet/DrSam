@@ -25,20 +25,23 @@ export default function DoctorSignup() {
     try {
       setIsLoading(true);
 
-      // Build redirect URL based on where the user is
-      // - On localhost it becomes: http://localhost:3000/signup/doctor/complete
-      // - On live it becomes: https://drsam.vercel.app/signup/doctor/complete
-      const redirectTo =
-        typeof window !== "undefined"
-          ? `${window.location.origin}/signup/doctor/complete`
-          : undefined;
+      // Decide where the email link should send the doctor
+      let redirectTo = "https://drsam.vercel.app/signup/doctor/complete";
+
+      if (typeof window !== "undefined") {
+        const origin = window.location.origin;
+        // If you are running locally, use localhost
+        if (origin.includes("localhost")) {
+          redirectTo = `${origin}/signup/doctor/complete`;
+        }
+      }
 
       const { error: signUpError } = await supabase.auth.signUp({
         email,
         password,
-        options: redirectTo
-          ? { emailRedirectTo: redirectTo }
-          : undefined,
+        options: {
+          emailRedirectTo: redirectTo,
+        },
       });
 
       if (signUpError) {
