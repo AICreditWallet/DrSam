@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
+// ===== Config =====
+
 const SPECIALTIES = [
   "General practice (GP)",
   "Dermatology",
@@ -31,25 +33,31 @@ const CONSULTATION_MODES = [
 const WEEKDAY_DAY_FEES = ["£20/h", "£45/h", "£55/h", "£75/h"];
 const WEEKDAY_NIGHT_FEES = ["£45/h", "£75/h", "£120/h"];
 const WEEKEND_DAY_FEES = ["£45/h", "£55/h", "£75/h", "£125/h", "£175/h"];
-const WEEKEND_NIGHT_FEES = ["£55/h", "£75/h", "£99/h", "£125/h", "£155/h", "£195/h"];
+const WEEKEND_NIGHT_FEES = [
+  "£55/h",
+  "£75/h",
+  "£99/h",
+  "£125/h",
+  "£155/h",
+  "£195/h",
+];
 const EMERGENCY_FEES = ["£125/h", "£210/h", "£350/h", "£450/h"];
+
+// ===== Component =====
 
 export default function DoctorOnboarding() {
   const [fullName, setFullName] = useState("");
   const [gmcNumber, setGmcNumber] = useState("");
 
-  // multi-select specialties & modes
   const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>([]);
   const [selectedModes, setSelectedModes] = useState<string[]>([]);
 
-  // availability blocks
-  const [weekdayDay, setWeekdayDay] = useState(false);   // 08:00–19:00
+  const [weekdayDay, setWeekdayDay] = useState(false); // 08:00–19:00
   const [weekdayNight, setWeekdayNight] = useState(false); // 19:00–08:00
-  const [weekendDay, setWeekendDay] = useState(false);   // 07:00–19:00
+  const [weekendDay, setWeekendDay] = useState(false); // 07:00–19:00
   const [weekendNight, setWeekendNight] = useState(false); // 19:00–07:00
   const [is247, setIs247] = useState(false);
 
-  // fees selected per block
   const [feeWeekdayDay, setFeeWeekdayDay] = useState("");
   const [feeWeekdayNight, setFeeWeekdayNight] = useState("");
   const [feeWeekendDay, setFeeWeekendDay] = useState("");
@@ -67,7 +75,7 @@ export default function DoctorOnboarding() {
 
   const [userId, setUserId] = useState<string | null>(null);
 
-  // load logged-in doctor
+  // Load logged-in doctor from Supabase session
   useEffect(() => {
     async function loadUser() {
       const { data, error } = await supabase.auth.getUser();
@@ -82,7 +90,13 @@ export default function DoctorOnboarding() {
     loadUser();
   }, []);
 
-  function toggleInList(value: string, list: string[], setter: (v: string[]) => void) {
+  // Helpers
+
+  function toggleInList(
+    value: string,
+    list: string[],
+    setter: (v: string[]) => void
+  ) {
     if (list.includes(value)) {
       setter(list.filter((v) => v !== value));
     } else {
@@ -113,7 +127,7 @@ export default function DoctorOnboarding() {
       return;
     }
 
-    // validation – everything required except photo
+    // Basic validation
     if (!fullName.trim()) {
       setError("Please enter your full name.");
       return;
@@ -126,21 +140,24 @@ export default function DoctorOnboarding() {
       setError("Please choose at least one specialty.");
       return;
     }
-    const anyAvailability = weekdayDay || weekdayNight || weekendDay || weekendNight || is247;
+
+    const anyAvailability =
+      weekdayDay || weekdayNight || weekendDay || weekendNight || is247;
     if (!anyAvailability) {
       setError("Please select when you’re available.");
       return;
     }
+
     if (selectedModes.length === 0) {
       setError("Please choose at least one consultation type.");
       return;
     }
+
     if (!clinicDetails.trim()) {
       setError("Please add your practice or clinic details.");
       return;
     }
 
-    // fees: require at least one fee, and for each selected time block, encourage fee selection
     const anyFee =
       feeWeekdayDay ||
       feeWeekdayNight ||
@@ -152,21 +169,28 @@ export default function DoctorOnboarding() {
       return;
     }
 
-    // Optional: warn if block selected but no fee for that block
     if (weekdayDay && !feeWeekdayDay) {
-      setError("Please choose a fee for weekdays 08:00–19:00 or untick that block.");
+      setError(
+        "Please choose a fee for weekdays 08:00–19:00 or untick that block."
+      );
       return;
     }
     if (weekdayNight && !feeWeekdayNight) {
-      setError("Please choose a fee for weekdays 19:00–08:00 or untick that block.");
+      setError(
+        "Please choose a fee for weekdays 19:00–08:00 or untick that block."
+      );
       return;
     }
     if (weekendDay && !feeWeekendDay) {
-      setError("Please choose a fee for weekends 07:00–19:00 or untick that block.");
+      setError(
+        "Please choose a fee for weekends 07:00–19:00 or untick that block."
+      );
       return;
     }
     if (weekendNight && !feeWeekendNight) {
-      setError("Please choose a fee for weekends 19:00–07:00 or untick that block.");
+      setError(
+        "Please choose a fee for weekends 19:00–07:00 or untick that block."
+      );
       return;
     }
 
@@ -175,7 +199,7 @@ export default function DoctorOnboarding() {
     try {
       let avatarUrl: string | null = null;
 
-      // 1) Upload avatar if provided
+      // Upload avatar if provided
       if (avatarFile) {
         const fileExt = avatarFile.name.split(".").pop();
         const filePath = `doctors/${userId}-${Date.now()}.${fileExt}`;
@@ -201,7 +225,7 @@ export default function DoctorOnboarding() {
         }
       }
 
-      // build structured values for saving
+      // Build availability + fees config
       const availabilityBlocks: string[] = [];
       if (weekdayDay) availabilityBlocks.push("weekday_day");
       if (weekdayNight) availabilityBlocks.push("weekday_night");
@@ -210,7 +234,6 @@ export default function DoctorOnboarding() {
       if (is247) availabilityBlocks.push("24_7");
 
       const availabilitySummary = availabilityBlocks.join(",");
-
       const consultationSummary = selectedModes.join(",");
 
       const feesConfig = {
@@ -221,7 +244,7 @@ export default function DoctorOnboarding() {
         emergency_home: feeEmergency || null,
       };
 
-      // 2) Save doctor profile in `doctors` table
+      // Save to doctors table
       const { error: upsertError } = await supabase.from("doctors").upsert(
         {
           id: userId,
@@ -345,7 +368,7 @@ export default function DoctorOnboarding() {
               />
             </label>
 
-            {/* Specialties multi-select */}
+            {/* Specialties */}
             <div className="auth-label">
               <div className="auth-label-title">Specialties</div>
               <p className="auth-label-sub">
@@ -360,7 +383,11 @@ export default function DoctorOnboarding() {
                       type="button"
                       className={`pill ${selected ? "pill-selected" : ""}`}
                       onClick={() =>
-                        toggleInList(item, selectedSpecialties, setSelectedSpecialties)
+                        toggleInList(
+                          item,
+                          selectedSpecialties,
+                          setSelectedSpecialties
+                        )
                       }
                     >
                       {item}
@@ -447,7 +474,9 @@ export default function DoctorOnboarding() {
                       key={item}
                       type="button"
                       className={`pill ${selected ? "pill-selected" : ""}`}
-                      onClick={() => toggleInList(item, selectedModes, setSelectedModes)}
+                      onClick={() =>
+                        toggleInList(item, selectedModes, setSelectedModes)
+                      }
                     >
                       {item}
                     </button>
@@ -456,7 +485,7 @@ export default function DoctorOnboarding() {
               </div>
             </div>
 
-            {/* Fees */}
+            {/* Fees as pill selectors */}
             <div className="auth-label">
               <div className="auth-label-title">Service fees</div>
               <p className="auth-label-sub">
@@ -466,82 +495,107 @@ export default function DoctorOnboarding() {
               <div className="fees-grid">
                 <div className="fees-item">
                   <div className="fees-label">Weekdays 08:00–19:00</div>
-                  <select
-                    className="auth-input auth-select"
-                    value={feeWeekdayDay}
-                    onChange={(e) => setFeeWeekdayDay(e.target.value)}
-                  >
-                    <option value="">Select fee…</option>
-                    {WEEKDAY_DAY_FEES.map((f) => (
-                      <option key={f} value={f}>
-                        {f}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="pill-row">
+                    {WEEKDAY_DAY_FEES.map((f) => {
+                      const selected = feeWeekdayDay === f;
+                      return (
+                        <button
+                          key={f}
+                          type="button"
+                          className={`pill ${
+                            selected ? "pill-selected" : ""
+                          }`}
+                          onClick={() => setFeeWeekdayDay(f)}
+                        >
+                          {f}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
 
                 <div className="fees-item">
                   <div className="fees-label">Weekdays 19:00–08:00</div>
-                  <select
-                    className="auth-input auth-select"
-                    value={feeWeekdayNight}
-                    onChange={(e) => setFeeWeekdayNight(e.target.value)}
-                  >
-                    <option value="">Select fee…</option>
-                    {WEEKDAY_NIGHT_FEES.map((f) => (
-                      <option key={f} value={f}>
-                        {f}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="pill-row">
+                    {WEEKDAY_NIGHT_FEES.map((f) => {
+                      const selected = feeWeekdayNight === f;
+                      return (
+                        <button
+                          key={f}
+                          type="button"
+                          className={`pill ${
+                            selected ? "pill-selected" : ""
+                          }`}
+                          onClick={() => setFeeWeekdayNight(f)}
+                        >
+                          {f}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
 
                 <div className="fees-item">
                   <div className="fees-label">Weekends 07:00–19:00</div>
-                  <select
-                    className="auth-input auth-select"
-                    value={feeWeekendDay}
-                    onChange={(e) => setFeeWeekendDay(e.target.value)}
-                  >
-                    <option value="">Select fee…</option>
-                    {WEEKEND_DAY_FEES.map((f) => (
-                      <option key={f} value={f}>
-                        {f}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="pill-row">
+                    {WEEKEND_DAY_FEES.map((f) => {
+                      const selected = feeWeekendDay === f;
+                      return (
+                        <button
+                          key={f}
+                          type="button"
+                          className={`pill ${
+                            selected ? "pill-selected" : ""
+                          }`}
+                          onClick={() => setFeeWeekendDay(f)}
+                        >
+                          {f}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
 
                 <div className="fees-item">
                   <div className="fees-label">Weekends 19:00–07:00</div>
-                  <select
-                    className="auth-input auth-select"
-                    value={feeWeekendNight}
-                    onChange={(e) => setFeeWeekendNight(e.target.value)}
-                  >
-                    <option value="">Select fee…</option>
-                    {WEEKEND_NIGHT_FEES.map((f) => (
-                      <option key={f} value={f}>
-                        {f}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="pill-row">
+                    {WEEKEND_NIGHT_FEES.map((f) => {
+                      const selected = feeWeekendNight === f;
+                      return (
+                        <button
+                          key={f}
+                          type="button"
+                          className={`pill ${
+                            selected ? "pill-selected" : ""
+                          }`}
+                          onClick={() => setFeeWeekendNight(f)}
+                        >
+                          {f}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
 
                 <div className="fees-item">
                   <div className="fees-label">Home visit / Emergency</div>
-                  <select
-                    className="auth-input auth-select"
-                    value={feeEmergency}
-                    onChange={(e) => setFeeEmergency(e.target.value)}
-                  >
-                    <option value="">Select fee…</option>
-                    {EMERGENCY_FEES.map((f) => (
-                      <option key={f} value={f}>
-                        {f}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="pill-row">
+                    {EMERGENCY_FEES.map((f) => {
+                      const selected = feeEmergency === f;
+                      return (
+                        <button
+                          key={f}
+                          type="button"
+                          className={`pill ${
+                            selected ? "pill-selected" : ""
+                          }`}
+                          onClick={() => setFeeEmergency(f)}
+                        >
+                          {f}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             </div>
