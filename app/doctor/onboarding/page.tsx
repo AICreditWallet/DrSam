@@ -124,14 +124,28 @@ export default function DoctorOnboarding() {
   // Load logged-in doctor from Supabase session
   useEffect(() => {
     async function loadUser() {
-      const { data, error } = await supabase.auth.getUser();
-      if (error || !data.user) {
-        setError(
-          "We couldn't find a logged-in doctor. Please sign up or sign in again."
-        );
-        return;
-      }
-      setUserId(data.user.id);
+      // Confirm there is a logged-in doctor
+const {
+  data: { session },
+  error: sessionError,
+} = await supabase.auth.getSession();
+
+if (sessionError) {
+  console.error(sessionError);
+  setError("We couldn't confirm your login. Please sign in again.");
+  return;
+}
+
+const user = session?.user;
+
+if (!user) {
+  // If somehow not logged in, send back to sign-in
+  window.location.href = "/signin";
+  return;
+}
+
+const userId = user.id;   
+      
     }
     loadUser();
   }, []);
