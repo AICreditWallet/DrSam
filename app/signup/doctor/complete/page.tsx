@@ -36,7 +36,11 @@ export default function DoctorSignupComplete() {
               <li>Set your availability and consultation type</li>
             </ul>
 
-            <Link href="/" className="auth-submit auth-submit-link">
+            {/* Go to onboarding page */}
+            <Link
+              href="/doctor/onboarding"
+              className="auth-submit auth-submit-link"
+            >
               Continue to Dr. Sam
             </Link>
           </div>
