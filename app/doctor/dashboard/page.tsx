@@ -7,6 +7,7 @@ import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 
 
+
 type DoctorRow = {
   full_name: string | null;
   avatar_url: string | null;
@@ -43,6 +44,8 @@ export default function DoctorDashboard() {
   const [doctor, setDoctor] = useState<DoctorRow | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isOnline, setIsOnline] = useState(false);
+
 
   // Mock data for now – later you can replace with Supabase queries
   const notifications: Appointment[] = [
@@ -172,24 +175,30 @@ export default function DoctorDashboard() {
           <div className="dashboard-actions">
   <button
     type="button"
-    className="btn-outline"
+    className="dash-btn dash-btn-outline"
     onClick={() => router.push("/doctor/onboarding")}
   >
     Edit profile
   </button>
 
-  <button type="button" className="btn-primary">
-    Go online
-  </button>
+  <button
+  type="button"
+  className={`dash-btn dash-btn-primary ${isOnline ? "dash-btn-primary-on" : ""}`}
+  onClick={() => setIsOnline(!isOnline)}
+>
+  {isOnline ? "Online" : "Go online"}
+</button>
+
 
   <button
     type="button"
-    className="btn-text"
+    className="dash-btn dash-btn-ghost"
     onClick={handleLogout}
   >
     Log out
   </button>
 </div>
+
 
         </header>
 

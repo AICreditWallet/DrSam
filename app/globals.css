@@ -1570,3 +1570,62 @@ body {
   background: rgba(248, 250, 252, 0.96);
   padding: 0.55rem 0.6rem;
 }
+/* Dashboard header actions */
+.dashboard-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Base button style */
+.dash-btn {
+  border-radius: 999px;
+  font-size: 0.95rem;
+  padding: 0.55rem 1.4rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease,
+    color 0.12s ease;
+  white-space: nowrap;
+}
+
+/* Edit profile – soft outline */
+.dash-btn-outline {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(120, 130, 200, 0.2);
+  color: #1f2430;
+}
+
+.dash-btn-outline:hover {
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 6px 18px rgba(33, 70, 180, 0.08);
+}
+
+/* Go online – gradient pill */
+.dash-btn-primary {
+  background: linear-gradient(135deg, #4c6fff, #5bb5ff);
+  color: #ffffff;
+  box-shadow: 0 10px 30px rgba(58, 123, 255, 0.35);
+}
+
+.dash-btn-primary-on {
+  background: linear-gradient(135deg, #31c17d, #4de3a0); /* green when online */
+  box-shadow: 0 10px 30px rgba(49, 193, 125, 0.35);
+}
+
+.dash-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 32px rgba(58, 123, 255, 0.45);
+}
+
+/* Log out – subtle text button */
+.dash-btn-ghost {
+  background: transparent;
+  color: #8a90a3;
+  padding-inline: 0.5rem;
+}
+
+.dash-btn-ghost:hover {
+  color: #f25b5b;
+}
