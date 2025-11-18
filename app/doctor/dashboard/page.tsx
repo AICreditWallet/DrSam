@@ -13,11 +13,12 @@ type DoctorRow = {
   full_name: string | null;
   avatar_url: string | null;
   specialty: string | null;
-  emergency_on: boolean | null;
-
-  // other fields you already have…
-  is_emergency_on: boolean | null;
+  availability: string | null;        // new
+  consultation_type: string | null;   // new
+  fees: string | null;                // new
+  emergency_on: boolean | null;       // new
 };
+
 
 
 type AppointmentStatus = "pending" | "accepted" | "completed" | "cancelled";
@@ -137,7 +138,7 @@ async function handleToggleEmergency() {
 
       const { data: doctorRow, error: doctorError } = await supabase
         .from("doctors")
-        .select("full_name, avatar_url, specialty, emergency_on")
+        .select("full_name, avatar_url, specialty, consultation_type, fees, availability, emergency_on")
         .eq("id", data.user.id)
         .maybeSingle();
 
