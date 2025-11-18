@@ -9,10 +9,16 @@ import { useRouter } from "next/navigation";
 
 
 type DoctorRow = {
+  id: string;
   full_name: string | null;
   avatar_url: string | null;
   specialty: string | null;
+  emergency_on: boolean | null;
+
+  // other fields you already have…
+  is_emergency_on: boolean | null;
 };
+
 
 type AppointmentStatus = "pending" | "accepted" | "completed" | "cancelled";
 
@@ -34,17 +40,28 @@ type Message = {
 };
 
 export default function DoctorDashboard() {
-    const router = useRouter();
-
-  async function handleLogout() {
-    await supabase.auth.signOut();
-    router.push("/"); // send them back to the home page
-  }
+  const router = useRouter();
 
   const [doctor, setDoctor] = useState<DoctorRow | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isOnline, setIsOnline] = useState(false);
+  const [emergencyOn, setEmergencyOn] = useState(false);
+
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    router.push("/"); // send them back to home page
+  }
+
+async function handleToggleEmergency() {
+  const newValue = !emergencyOn;
+  setEmergencyOn(newValue);
+
+  if (!doctor) return;
+
+  await supabase.from("doctors").update({
+    emergency_on: newValue
+  }).eq("id", doctor.id);
+}
 
 
   // Mock data for now – later you can replace with Supabase queries
@@ -120,7 +137,7 @@ export default function DoctorDashboard() {
 
       const { data: doctorRow, error: doctorError } = await supabase
         .from("doctors")
-        .select("full_name, avatar_url, specialty")
+        .select("full_name, avatar_url, specialty, emergency_on")
         .eq("id", data.user.id)
         .maybeSingle();
 
@@ -129,6 +146,7 @@ export default function DoctorDashboard() {
         setError("We couldn’t load your profile just now.");
       } else if (doctorRow) {
         setDoctor(doctorRow as DoctorRow);
+        setEmergencyOn(!!doctorRow.emergency_on);
       }
 
       setLoading(false);
@@ -183,11 +201,12 @@ export default function DoctorDashboard() {
 
   <button
   type="button"
-  className={`dash-btn dash-btn-primary ${isOnline ? "dash-btn-primary-on" : ""}`}
-  onClick={() => setIsOnline(!isOnline)}
+  className={`dash-btn dash-btn-primary ${emergencyOn ? "dash-btn-primary-on" : ""}`}
+  onClick={handleToggleEmergency}
 >
-  {isOnline ? "Online" : "Go online"}
+  {emergencyOn ? "Emergency ON" : "Emergency OFF"}
 </button>
+
 
 
   <button
