@@ -1,360 +1,212 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
-type DoctorRow = {
-  full_name: string | null;
-  avatar_url: string | null;
-  specialty: string | null;
-};
-
-type AppointmentStatus = "pending" | "accepted" | "completed" | "cancelled";
-
-type Appointment = {
-  id: string;
-  patientName: string;
-  time: string;
-  type: string;
-  status: AppointmentStatus;
-  isEmergency?: boolean;
-};
-
-type Message = {
-  id: string;
-  patientName: string;
-  preview: string;
-  time: string;
-  hasAttachment?: boolean;
-};
-
 export default function DoctorDashboard() {
-  const [doctor, setDoctor] = useState<DoctorRow | null>(null);
+  const router = useRouter();
+
+  const [isOnline, setIsOnline] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [doctorName, setDoctorName] = useState("Doctor");
+  const [doctorSpecialty, setDoctorSpecialty] = useState<string | null>(null);
 
-  // Mock data for now – later you can replace with Supabase queries
-  const notifications: Appointment[] = [
-    {
-      id: "1",
-      patientName: "Sarah K.",
-      time: "Today • 15:30",
-      type: "GP video",
-      status: "pending",
-    },
-    {
-      id: "2",
-      patientName: "Emergency triage",
-      time: "Now",
-      type: "Emergency",
-      status: "pending",
-      isEmergency: true,
-    },
-  ];
-
-  const upcomingAppointments: Appointment[] = [
-    {
-      id: "3",
-      patientName: "James W.",
-      time: "Tomorrow • 09:00",
-      type: "Dermatology • video",
-      status: "accepted",
-    },
-    {
-      id: "4",
-      patientName: "Amir R.",
-      time: "Thu • 18:30",
-      type: "Mental health • in person",
-      status: "accepted",
-    },
-  ];
-
-  const pastAppointments: Appointment[] = [
-    {
-      id: "5",
-      patientName: "Emily P.",
-      time: "Yesterday • 11:00",
-      type: "GP • video",
-      status: "completed",
-    },
-  ];
-
-  const inbox: Message[] = [
-    {
-      id: "m1",
-      patientName: "James W.",
-      preview: "Hi, can we move tomorrow’s appointment slightly later?",
-      time: "10 min ago",
-    },
-    {
-      id: "m2",
-      patientName: "Sarah K.",
-      preview: "Uploaded blood test results for review.",
-      time: "1 hr ago",
-      hasAttachment: true,
-    },
-  ];
-
+  // 👉 Check that the doctor is logged in and load basic profile info
   useEffect(() => {
     async function loadDoctor() {
-      const { data, error } = await supabase.auth.getUser();
-      if (error || !data.user) {
-        setError("Please sign in again to view your dashboard.");
-        setLoading(false);
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session?.user) {
+        router.push("/signin");
         return;
       }
 
-      const { data: doctorRow, error: doctorError } = await supabase
+      const { data } = await supabase
         .from("doctors")
-        .select("full_name, avatar_url, specialty")
-        .eq("id", data.user.id)
+        .select("full_name, specialty")
+        .eq("id", session.user.id)
         .maybeSingle();
 
-      if (doctorError) {
-        console.error(doctorError);
-        setError("We couldn’t load your profile just now.");
-      } else if (doctorRow) {
-        setDoctor(doctorRow as DoctorRow);
-      }
+      if (data?.full_name) setDoctorName(data.full_name);
+      if (data?.specialty) setDoctorSpecialty(data.specialty);
 
       setLoading(false);
     }
 
     loadDoctor();
-  }, []);
+  }, [router]);
+
+  // 👉 Log out handler
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    router.push("/");
+  }
+
+  if (loading) {
+    return (
+      <div className="auth-root">
+        <div className="auth-shell">
+          <main className="auth-main">
+            <p className="info-text">Loading your dashboard…</p>
+          </main>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="dash-root">
-      <div className="dash-shell">
-        <header className="dash-header">
-          <div className="dash-header-left">
-            <div className="dash-avatar-wrapper">
-              {doctor?.avatar_url ? (
-                <Image
-                  src={doctor.avatar_url}
-                  alt={doctor.full_name || "Doctor avatar"}
-                  width={52}
-                  height={52}
-                  className="dash-avatar-image"
-                />
-              ) : (
-                <div className="dash-avatar-placeholder">
-                  <span role="img" aria-label="Doctor">
-                    🩺
-                  </span>
-                </div>
-              )}
+    <div className="dashboard-root">
+      <div className="dashboard-shell">
+        {/* HEADER */}
+        <header className="dashboard-header">
+          <div className="dashboard-brand">
+            <div className="logo-wrapper">
+              <Image
+                src="/logo.png"
+                alt="Dr. Sam logo"
+                width={44}
+                height={44}
+                className="logo-image"
+              />
             </div>
             <div>
-              <p className="dash-eyebrow">Doctor dashboard</p>
-              <h1 className="dash-title">
-                {doctor?.full_name || "Welcome back"}
-              </h1>
-              <p className="dash-subtitle">
-                {doctor?.specialty
-                  ? doctor.specialty.replace(/,/g, " • ")
-                  : "Keep your availability up to date so patients can find you quickly."}
+              <p className="dashboard-eyebrow">Doctor dashboard</p>
+              <h1 className="dashboard-title">Good to see you, {doctorName}.</h1>
+              <p className="dashboard-subtitle">
+                {doctorSpecialty
+                  ? `You’re set up as: ${doctorSpecialty}.`
+                  : "Manage your profile, appointments and availability in one place."}
               </p>
             </div>
           </div>
 
-          <div className="dash-header-actions">
-            <Link href="/doctor/onboarding" className="dash-ghost-button">
+          <div className="dashboard-actions">
+            {/* Edit profile opens the onboarding/profile form */}
+            <button
+              type="button"
+              className="btn-outline"
+              onClick={() => router.push("/doctor/onboarding")}
+            >
               Edit profile
-            </Link>
-            <button type="button" className="dash-primary-button">
-              Go online
+            </button>
+
+            {/* Go online toggle */}
+            <button
+              type="button"
+              className={isOnline ? "btn-primary" : "btn-outline"}
+              onClick={() => setIsOnline(!isOnline)}
+            >
+              {isOnline ? "Online" : "Go online"}
+            </button>
+
+            {/* Log out */}
+            <button
+              type="button"
+              className="btn-text"
+              onClick={handleLogout}
+            >
+              Log out
             </button>
           </div>
         </header>
 
-        <main className="dash-main">
-          {loading && <p className="auth-message">Loading your dashboard…</p>}
-          {error && <p className="auth-error">{error}</p>}
+        {/* MAIN CONTENT */}
+        <main className="dashboard-main">
+          {/* Left column – upcoming appointments, alerts, etc. */}
+          <section className="dashboard-column">
+            <div className="dashboard-card">
+              <h2 className="card-title">Today&apos;s overview</h2>
+              <p className="card-subtitle">
+                When you go online, new requests and emergencies will appear
+                here in real time.
+              </p>
 
-          {!loading && !error && (
-            <>
-              {/* Top summary / balances */}
-              <section className="dash-grid dash-grid-3">
-                <div className="dash-card">
-                  <p className="dash-card-label">Today’s schedule</p>
-                  <p className="dash-card-main">2 appointments</p>
-                  <p className="dash-card-sub">
-                    1 pending confirmation, 1 emergency.
+              <div className="pill-row">
+                <span className="pill">0 new appointment requests</span>
+                <span className="pill pill-soft">0 emergencies</span>
+                <span className="pill pill-soft">0 messages</span>
+              </div>
+
+              <div className="empty-state">
+                <p className="empty-title">No appointments yet.</p>
+                <p className="empty-text">
+                  Once patients start booking, you’ll see your schedule here.
+                </p>
+              </div>
+            </div>
+
+            <div className="dashboard-card">
+              <h2 className="card-title">Future appointments</h2>
+              <p className="card-subtitle">
+                Accepted bookings will appear in your timeline.
+              </p>
+
+              <div className="empty-state">
+                <p className="empty-title">Nothing scheduled.</p>
+                <p className="empty-text">
+                  You can refine how and when you see patients from your
+                  profile and availability settings.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* Right column – inbox + payouts summary */}
+          <section className="dashboard-column">
+            <div className="dashboard-card">
+              <h2 className="card-title">Messages</h2>
+              <p className="card-subtitle">
+                Patients with a booking can message you about symptoms or
+                change their time.
+              </p>
+
+              <div className="empty-state">
+                <p className="empty-title">No messages yet.</p>
+                <p className="empty-text">
+                  You’ll be able to review medical documents and chat securely
+                  with patients here.
+                </p>
+              </div>
+            </div>
+
+            <div className="dashboard-card">
+              <h2 className="card-title">Payouts</h2>
+              <p className="card-subtitle">
+                Add your bank details so you can receive payments from
+                completed appointments.
+              </p>
+
+              <div className="payout-row">
+                <div>
+                  <p className="payout-label">Current balance</p>
+                  <p className="payout-amount">£0.00</p>
+                  <p className="payout-hint">
+                    This will update as you start seeing patients.
                   </p>
                 </div>
-
-                <div className="dash-card">
-                  <p className="dash-card-label">Available balance</p>
-                  <p className="dash-card-main">£640.00</p>
-                  <p className="dash-card-sub">Next payout on Friday.</p>
-                </div>
-
-                <div className="dash-card dash-card-highlight">
-                  <p className="dash-card-label">Bank details</p>
-                  <p className="dash-card-main">Set up payouts</p>
-                  <p className="dash-card-sub">
-                    Add your bank details so you can get paid.
-                  </p>
-                  <button type="button" className="dash-secondary-button">
-                    Add bank account
-                  </button>
-                </div>
-              </section>
-
-              {/* Notifications & appointments */}
-              <section className="dash-grid dash-grid-2">
-                {/* Notifications */}
-                <div className="dash-card">
-                  <div className="dash-card-header">
-                    <h2 className="dash-card-title">Notifications</h2>
-                    <span className="dash-pill small">
-                      {notifications.length} new
-                    </span>
-                  </div>
-                  <div className="dash-list">
-                    {notifications.map((n) => (
-                      <div
-                        key={n.id}
-                        className={`dash-notif-row ${
-                          n.isEmergency ? "dash-notif-emergency" : ""
-                        }`}
-                      >
-                        <div>
-                          <p className="dash-notif-main">
-                            {n.isEmergency ? "🚨 Emergency" : "New request"}
-                          </p>
-                          <p className="dash-notif-sub">
-                            {n.patientName} • {n.type}
-                          </p>
-                          <p className="dash-notif-time">{n.time}</p>
-                        </div>
-                        <div className="dash-notif-actions">
-                          <button
-                            type="button"
-                            className="dash-notif-button decline"
-                          >
-                            Decline
-                          </button>
-                          <button
-                            type="button"
-                            className="dash-notif-button accept"
-                          >
-                            Accept
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Upcoming appointments */}
-                <div className="dash-card">
-                  <div className="dash-card-header">
-                    <h2 className="dash-card-title">Upcoming appointments</h2>
-                    <button type="button" className="dash-link-button">
-                      View calendar
-                    </button>
-                  </div>
-                  <div className="dash-list">
-                    {upcomingAppointments.map((a) => (
-                      <div key={a.id} className="dash-appointment-row">
-                        <div>
-                          <p className="dash-apt-main">{a.patientName}</p>
-                          <p className="dash-apt-sub">{a.type}</p>
-                          <p className="dash-apt-time">{a.time}</p>
-                        </div>
-                        <span className="dash-pill">Accepted</span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="dash-divider" />
-                  <div className="dash-list-header">
-                    <p className="dash-card-sub">Recent appointments</p>
-                  </div>
-                  <div className="dash-list">
-                    {pastAppointments.map((a) => (
-                      <div key={a.id} className="dash-appointment-row">
-                        <div>
-                          <p className="dash-apt-main">{a.patientName}</p>
-                          <p className="dash-apt-sub">{a.type}</p>
-                          <p className="dash-apt-time">{a.time}</p>
-                        </div>
-                        <span className="dash-pill muted">Completed</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </section>
-
-              {/* Inbox & documents + payouts detail */}
-              <section className="dash-grid dash-grid-2">
-                {/* Inbox */}
-                <div className="dash-card">
-                  <div className="dash-card-header">
-                    <h2 className="dash-card-title">Inbox</h2>
-                    <button type="button" className="dash-link-button">
-                      Open messages
-                    </button>
-                  </div>
-                  <div className="dash-list">
-                    {inbox.map((m) => (
-                      <div key={m.id} className="dash-message-row">
-                        <div className="dash-message-avatar">
-                          {m.patientName[0]}
-                        </div>
-                        <div className="dash-message-body">
-                          <p className="dash-message-main">{m.patientName}</p>
-                          <p className="dash-message-sub">{m.preview}</p>
-                          <p className="dash-message-time">{m.time}</p>
-                        </div>
-                        {m.hasAttachment && (
-                          <span className="dash-pill small">
-                            📎 Document
-                          </span>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                  <p className="dash-card-sub">
-                    Patients can message you to adjust appointments and upload
-                    documents for review.
-                  </p>
-                </div>
-
-                {/* Payouts detail */}
-                <div className="dash-card">
-                  <div className="dash-card-header">
-                    <h2 className="dash-card-title">Payouts & balance</h2>
-                  </div>
-                  <div className="dash-payouts-grid">
-                    <div className="dash-payout-card">
-                      <p className="dash-card-label">Available</p>
-                      <p className="dash-card-main">£640.00</p>
-                      <p className="dash-card-sub">
-                        Ready to withdraw to your bank account.
-                      </p>
-                    </div>
-                    <div className="dash-payout-card">
-                      <p className="dash-card-label">Upcoming</p>
-                      <p className="dash-card-main">£320.00</p>
-                      <p className="dash-card-sub">
-                        From 4 future appointments this week.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="dash-divider" />
-                  <p className="dash-card-sub">
-                    You’ll be able to track payments per appointment once
-                    payouts are connected.
-                  </p>
-                </div>
-              </section>
-            </>
-          )}
+                <button
+                  type="button"
+                  className="btn-primary"
+                  onClick={() => router.push("/doctor/billing")}
+                >
+                  Add bank details
+                </button>
+              </div>
+            </div>
+          </section>
         </main>
+
+        {/* FOOTER / BACK TO HOME LINK IF NEEDED */}
+        <footer className="dashboard-footer">
+          <Link href="/" className="footer-link">
+            ← Back to home
+          </Link>
+        </footer>
       </div>
     </div>
   );
