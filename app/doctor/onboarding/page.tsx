@@ -364,7 +364,7 @@ router.push("/doctor/dashboard");
             </div>
           </div>
 
-          <Link href="/" className="account-close">
+          <Link href="/doctor/dashboard" className="account-close">
             ✕
           </Link>
         </header>

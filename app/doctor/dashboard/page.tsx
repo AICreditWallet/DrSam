@@ -33,6 +33,13 @@ type Message = {
 };
 
 export default function DoctorDashboard() {
+    const router = useRouter();
+
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    router.push("/"); // send them back to the home page
+  }
+
   const [doctor, setDoctor] = useState<DoctorRow | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -162,14 +169,28 @@ export default function DoctorDashboard() {
             </div>
           </div>
 
-          <div className="dash-header-actions">
-            <Link href="/doctor/onboarding" className="dash-ghost-button">
-              Edit profile
-            </Link>
-            <button type="button" className="dash-primary-button">
-              Go online
-            </button>
-          </div>
+          <div className="dashboard-actions">
+  <button
+    type="button"
+    className="btn-outline"
+    onClick={() => router.push("/doctor/onboarding")}
+  >
+    Edit profile
+  </button>
+
+  <button type="button" className="btn-primary">
+    Go online
+  </button>
+
+  <button
+    type="button"
+    className="btn-text"
+    onClick={handleLogout}
+  >
+    Log out
+  </button>
+</div>
+
         </header>
 
         <main className="dash-main">
