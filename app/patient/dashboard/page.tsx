@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { supabase } from "@/lib/supabase";
+import {supabase} from "@/lib/supabase";
 
 type PatientRow = {
+  id: string;
   full_name: string | null;
   avatar_url: string | null;
 };
@@ -17,106 +18,146 @@ export default function PatientDashboard() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function load() {
-      const { data, error } = await supabase.auth.getUser();
-      if (error || !data.user) {
-        setError("Please sign in to view your dashboard.");
-        setLoading(false);
+    async function loadPatient() {
+      setLoading(true);
+      setError(null);
+
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError || !user) {
+        router.push("/signin");
         return;
       }
 
-      const { data: patientRow, error: patientError } = await supabase
+      const { data, error: patientError } = await supabase
         .from("patients")
-        .select("full_name, avatar_url")
-        .eq("id", data.user.id)
+        .select("id, full_name, avatar_url")
+        .eq("id", user.id)
         .maybeSingle();
 
       if (patientError) {
         console.error(patientError);
-        setError("We couldn't load your profile just now.");
-        setLoading(false);
-        return;
+        setError("We couldn’t load your profile just now.");
+      } else if (data) {
+        setPatient(data as PatientRow);
       }
 
-      setPatient(patientRow as PatientRow);
       setLoading(false);
     }
 
-    load();
-  }, []);
+    loadPatient();
+  }, [router]);
+
+  function getInitials(name: string | null): string {
+    if (!name) return "P";
+    const parts = name.trim().split(" ");
+    if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+    return (
+      parts[0].charAt(0).toUpperCase() + parts[1].charAt(0).toUpperCase()
+    );
+  }
 
   async function handleLogout() {
     await supabase.auth.signOut();
     router.push("/");
   }
 
-  if (loading) {
-    return (
-      <div className="dashboard-shell">
-        <div className="dashboard-card">Loading dashboard…</div>
-      </div>
-    );
-  }
+  const displayName =
+    patient?.full_name?.split(" ")[0] || "there"; // first name or “there”
 
   return (
-    <div className="dashboard-shell">
-      <div className="dashboard-card">
-        <div className="dashboard-header">
-          <div className="dashboard-title-block">
-            <div className="avatar-circle small">
+    <div className="patient-root">
+      <div className="patient-shell">
+        {/* Top hero card */}
+        <header className="patient-hero">
+          <div className="patient-hero-main">
+            <div className="patient-avatar">
               {patient?.avatar_url ? (
                 <Image
                   src={patient.avatar_url}
-                  alt="Avatar"
-                  width={48}
-                  height={48}
+                  alt={patient.full_name || "Patient avatar"}
+                  width={64}
+                  height={64}
+                  className="patient-avatar-img"
                 />
               ) : (
-                <span className="avatar-initials">
-                  {patient?.full_name?.[0] ?? "P"}
-                </span>
+                <div className="patient-avatar-fallback">
+                  {getInitials(patient?.full_name || null)}
+                </div>
               )}
             </div>
-            <div>
-              <h1 className="dashboard-title">
-                Welcome back{patient?.full_name ? `, ${patient.full_name}` : ""}{" "}
-              </h1>
-              <p className="dashboard-subtitle">
-                Book appointments or request urgent help quickly.
+
+            <div className="patient-hero-text">
+              <p className="patient-pill">Patient dashboard</p>
+              <h1 className="patient-title">Welcome back, {displayName}</h1>
+              <p className="patient-subtitle">
+                Book appointments or request urgent help quickly, all in one
+                place.
               </p>
             </div>
           </div>
 
-          <button className="dash-btn-ghost" type="button" onClick={handleLogout}>
-            Log out
-          </button>
-        </div>
+          <div className="patient-hero-actions">
+            <button
+              type="button"
+              className="dash-btn dash-btn-outline"
+              onClick={() => router.push("/patient/onboarding")}
+            >
+              Edit profile
+            </button>
+            <button
+              type="button"
+              className="dash-btn dash-btn-primary"
+              onClick={() => router.push("/emergency")}
+            >
+              Emergency help
+            </button>
+            <button
+              type="button"
+              className="dash-btn dash-btn-secondary"
+              onClick={() => router.push("/appointments")}
+            >
+              Book an appointment
+            </button>
+            <button
+              type="button"
+              className="dash-btn dash-btn-ghost"
+              onClick={handleLogout}
+            >
+              Log out
+            </button>
+          </div>
+        </header>
 
-        <div className="dashboard-actions">
-          <button
-            type="button"
-            className="dash-btn-outline"
-            onClick={() => router.push("/patient/onboarding")}
-          >
-            Edit profile
-          </button>
+        {/* Lower content – placeholder blocks you can fill later */}
+        <main className="patient-main">
+          {error && <p className="patient-error">{error}</p>}
 
-          <button
-            type="button"
-            className="dash-btn-primary"
-            onClick={() => router.push("/emergency")}
-          >
-            Emergency help
-          </button>
+          {loading ? (
+            <div className="patient-card">Loading your dashboard…</div>
+          ) : (
+            <div className="patient-grid">
+              <section className="patient-card">
+                <h2 className="patient-card-title">Upcoming appointments</h2>
+                <p className="patient-card-text">
+                  You don’t have any appointments yet. When you book one, it
+                  will show up here.
+                </p>
+              </section>
 
-          <button
-            type="button"
-            className="dash-btn-primary"
-            onClick={() => alert("Later: normal booking flow")}
-          >
-            Book an appointment
-          </button>
-        </div>
+              <section className="patient-card">
+                <h2 className="patient-card-title">Recent messages</h2>
+                <p className="patient-card-text">
+                  Messages with doctors will appear here once you start using
+                  Dr. Sam.
+                </p>
+              </section>
+            </div>
+          )}
+        </main>
       </div>
     </div>
   );
