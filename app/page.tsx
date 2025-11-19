@@ -15,14 +15,18 @@ export default function Home() {
     <div className="app-root">
       {/* Main shell */}
       <div className="app-shell home-hero">
-        {/* Top gradient header */}
+
+        {/* ========================= HEADER ========================= */}
         <header className="header-hero">
+
+          {/* TOP BAR */}
           <div className="header-top">
-            {/* Brand + logo */}
+
+            {/* LOGO + BRAND */}
             <div className="brand">
               <div className="logo-wrapper">
                 <Image
-                  src="/logo.png" // make sure public/logo.png exists
+                  src="/logo.png"
                   alt="Dr. Sam Logo"
                   width={56}
                   height={56}
@@ -36,7 +40,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Top-right buttons */}
+            {/* BUTTONS */}
             <div className="top-buttons">
               <Link href="/signin" className="btn-outline">
                 Sign in
@@ -48,38 +52,31 @@ export default function Home() {
             </div>
           </div>
 
+          {/* HERO TEXT + PROMPT */}
           <div className="hero-text-block">
             <h1 className="hero-heading">Consult a doctor instantly.</h1>
 
-            <div className="hero-text-block">
-  <h1 className="hero-heading">Consult a doctor instantly.</h1>
-
-  <button className="hero-prompt" type="button">
-    <span className="hero-emoji">😊</span>
-    <span>How are you feeling today?</span>
-  </button>
-</div>
-
-
-
-
+            <button className="hero-prompt" type="button">
+              <span className="hero-emoji">😊</span>
+              <span>How are you feeling today?</span>
+            </button>
           </div>
         </header>
+        {/* ========================= END HEADER ========================= */}
 
-        {/* Main content */}
+
+        {/* ========================= MAIN ========================= */}
         <main className="home-main">
-          {/* Category chips */}
+
+          {/* CATEGORY CHIPS */}
           <div className="chip-row">
             <span className="chip chip-active">GP</span>
             <span className="chip">Mental health</span>
             <span className="chip">Women’s health</span>
           </div>
 
-          {/* Doctors row */}
-          <section
-            className="doctor-section"
-            aria-label="Available doctors preview"
-          >
+          {/* DOCTOR LIST */}
+          <section className="doctor-section" aria-label="Available doctors preview">
             <div className="section-header">
               <span className="section-title">Available now</span>
               <span className="section-link">Sign in to see all</span>
@@ -96,31 +93,34 @@ export default function Home() {
 
                   <div className="doctor-footer">
                     <span className="doctor-tag">{doc.tag}</span>
-                    <span className="doctor-locked">
-                      Sign in to view details
-                    </span>
+                    <span className="doctor-locked">Sign in to view details</span>
                   </div>
                 </article>
               ))}
             </div>
           </section>
 
-        
         </main>
-      </div>
+        {/* ========================= END MAIN ========================= */}
 
-      {/* Fixed bottom buttons */}
-      <div className="bottom-fixed">
-        <div className="bottom-inner">
-          <button className="btn-emergency" type="button">
-            <span className="emergency-dot" />
-            <span>Emergency</span>
-          </button>
 
-          <button className="btn-book" type="button">
-            Book an appointment
-          </button>
+        {/* ========================= FIXED BOTTOM BUTTONS ========================= */}
+        <div className="bottom-fixed">
+          <div className="bottom-inner">
+
+            <button className="btn-emergency" type="button">
+              <span className="emergency-dot" />
+              <span>Emergency</span>
+            </button>
+
+            <button className="btn-book" type="button">
+              Book an appointment
+            </button>
+
+          </div>
         </div>
+        {/* ============================================================ */}
+
       </div>
     </div>
   );
