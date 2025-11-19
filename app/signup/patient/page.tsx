@@ -4,94 +4,103 @@ import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
-export default function PatientSignupPage() {
+export default function PatientSignup() {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<string | null>(null);
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
+    "idle"
+  );
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setStatus(null);
+    setStatus("sending");
     setError(null);
-    setLoading(true);
 
     try {
-      const redirectUrl = `${window.location.origin}/patient/dashboard`;
+      const redirectTo =
+        typeof window !== "undefined"
+          ? `${window.location.origin}/patient/onboarding`
+          : undefined;
 
       const { error } = await supabase.auth.signInWithOtp({
-        email,
+        email: email.trim(),
         options: {
-          emailRedirectTo: redirectUrl,
-          // store role so later you can tell doctor vs patient
-          data: { role: "patient" },
+          emailRedirectTo: redirectTo,
         },
       });
 
       if (error) {
         console.error(error);
-        setError("We couldn't send the sign-in link. Please try again.");
-      } else {
-        setStatus("Check your email for a magic link to continue.");
+        setError("We couldn't send the link. Please try again.");
+        setStatus("error");
+        return;
       }
+
+      setStatus("sent");
     } catch (err) {
       console.error(err);
       setError("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
+      setStatus("error");
     }
-  }
+  };
 
   return (
     <div className="auth-root">
-      <div className="auth-shell">
+      <div className="auth-card">
+        {/* Header */}
         <header className="auth-header">
           <div>
-            <p className="auth-eyebrow">Create patient account</p>
-            <h1 className="auth-title">Sign up as a patient</h1>
+            <p className="auth-eyebrow">Patient sign up</p>
+            <h1 className="auth-title">Create your patient account</h1>
             <p className="auth-subtitle">
-              Enter your email and we&apos;ll send you a secure sign-in link.
+              Enter your email and we’ll send you a secure sign-in link to
+              finish setting up your profile.
             </p>
           </div>
 
-          <Link href="/" className="account-close">
+          <Link href="/" className="auth-close">
             ✕
           </Link>
         </header>
 
-        <main className="auth-main">
-          <form onSubmit={handleSubmit} className="auth-form">
-            <label className="auth-label">
-              Email address
-              <input
-                className="auth-input"
-                type="email"
-                required
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </label>
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="auth-form">
+          <label className="auth-label">
+            Email address
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="auth-input"
+              placeholder="you@example.com"
+            />
+          </label>
 
-            {error && <p className="auth-error">{error}</p>}
-            {status && <p className="auth-status">{status}</p>}
+          {error && <p className="auth-error">{error}</p>}
 
-            <button
-              className="auth-button-primary"
-              type="submit"
-              disabled={loading}
-            >
-              {loading ? "Sending link..." : "Send magic link"}
-            </button>
-
-            <p className="auth-footer-note">
-              Already have an account?{" "}
-              <Link href="/signin" className="account-link">
-                Sign in
-              </Link>
+          {status === "sent" && (
+            <p className="auth-success">
+              Check your inbox for a link from Dr. Sam. Tap it to continue to
+              your patient onboarding.
             </p>
-          </form>
-        </main>
+          )}
+
+          <button
+            type="submit"
+            className="auth-button"
+            disabled={status === "sending"}
+          >
+            {status === "sending" ? "Sending link…" : "Send magic link"}
+          </button>
+        </form>
+
+        <p className="auth-footer">
+          Already have an account?{" "}
+          <Link href="/signin" className="auth-link">
+            Sign in
+          </Link>
+        </p>
       </div>
     </div>
   );
