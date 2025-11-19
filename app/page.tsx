@@ -51,12 +51,15 @@ export default function Home() {
           <div className="hero-text-block">
             <h1 className="hero-heading">Consult a doctor instantly.</h1>
 
-            {/* AI Chat – minimal prompt */}
-{/* AI Chat – minimal prompt */}
-<Link href="/ai" className="ai-chat-bar">
-  <span className="ai-chat-text">Ask Dr. Sam (AI)</span>
-  <span className="ai-chat-action">Chat →</span>
-</Link>
+            <div className="hero-text-block">
+  <h1 className="hero-heading">Consult a doctor instantly.</h1>
+
+  <button className="hero-prompt" type="button">
+    <span className="hero-emoji">😊</span>
+    <span>How are you feeling today?</span>
+  </button>
+</div>
+
 
 
 

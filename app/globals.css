@@ -1736,3 +1736,20 @@ body {
 .home-hero .brand-subtitle {
   color: #f9fafb;
 }
+.ai-chat-bar {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #ffffff;
+  font-size: 15px;
+  margin: 12px 0 4px 0;
+  border: 1px solid rgba(255,255,255,0.18);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
