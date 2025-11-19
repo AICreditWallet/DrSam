@@ -1752,4 +1752,227 @@ body {
   cursor: pointer;
   transition: background 0.2s;
 }
+/* Emergency page shell */
+.emergency-root {
+  background: radial-gradient(circle at top, #2a3bff 0, #020817 55%);
+  min-height: 100vh;
+  color: #f9fbff;
+}
+
+.emergency-shell {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px 120px;
+}
+
+/* Header */
+.emergency-header-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.emergency-back {
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: rgba(248, 250, 252, 0.8);
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  backdrop-filter: blur(10px);
+}
+
+.emergency-back:hover {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+.emergency-title-block {
+  flex: 1;
+}
+
+.emergency-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.emergency-subtitle {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  color: rgba(226, 232, 240, 0.8);
+}
+
+/* 111 / 999 box */
+.emergency-warning {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(15, 23, 42, 0.7);
+  box-shadow: 0 14px 45px rgba(15, 23, 42, 0.54);
+  font-size: 0.9rem;
+}
+
+.emergency-warning-main {
+  margin: 0 0 4px;
+  font-weight: 600;
+}
+
+.emergency-warning-secondary {
+  margin: 0;
+  color: rgba(148, 163, 184, 0.95);
+}
+
+.emergency-link-strong {
+  color: #fee2e2;
+  font-weight: 700;
+}
+
+.emergency-link {
+  color: #c7d2fe;
+}
+
+/* States */
+.emergency-main {
+  margin-top: 20px;
+}
+
+.emergency-state,
+.emergency-error {
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.7);
+  font-size: 0.95rem;
+}
+
+.emergency-error {
+  border: 1px solid rgba(248, 113, 113, 0.6);
+}
+
+/* Doctor row */
+.emergency-doctor-section {
+  margin-top: 8px;
+}
+
+.emergency-doctor-scroll {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding: 8px 4px 8px 0;
+  scroll-snap-type: x mandatory;
+}
+
+.emergency-card {
+  scroll-snap-align: start;
+  min-width: 260px;
+  max-width: 280px;
+  border-radius: 24px;
+  padding: 14px 14px 16px;
+  background: radial-gradient(circle at top, #4f46e5 0, #020617 55%);
+  box-shadow: 0 18px 55px rgba(15, 23, 42, 0.8);
+}
+
+/* Card top */
+.emergency-card-top {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.emergency-avatar {
+  flex-shrink: 0;
+}
+
+.emergency-avatar-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 2px solid rgba(191, 219, 254, 0.9);
+}
+
+.emergency-avatar-fallback {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4c6fff, #a855f7);
+  color: #f9fafb;
+  font-weight: 700;
+}
+
+.emergency-card-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.emergency-card-name {
+  font-weight: 600;
+  font-size: 0.98rem;
+}
+
+.emergency-card-specialty {
+  font-size: 0.85rem;
+  color: rgba(191, 219, 254, 0.9);
+}
+
+.emergency-card-fee {
+  margin-top: 2px;
+  font-size: 0.82rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(251, 191, 36, 0.12);
+  color: #fbbf24;
+}
+
+/* Message block */
+.emergency-message-block {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(15, 23, 42, 0.6);
+}
+
+.emergency-message-label {
+  display: block;
+  font-size: 0.78rem;
+  margin-bottom: 4px;
+  color: rgba(226, 232, 240, 0.85);
+}
+
+.emergency-message-input {
+  width: 100%;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: rgba(15, 23, 42, 0.8);
+  padding: 8px 10px;
+  font-size: 0.82rem;
+  color: #e5e7eb;
+  resize: none;
+}
+
+.emergency-message-input::placeholder {
+  color: rgba(148, 163, 184, 0.9);
+}
+
+.emergency-message-send {
+  margin-top: 6px;
+  width: 100%;
+  border-radius: 999px;
+  border: none;
+  padding: 8px 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: linear-gradient(135deg, #4c6fff, #6366f1);
+  color: white;
+  box-shadow: 0 10px 32px rgba(79, 70, 229, 0.55);
+}
+
+.emergency-fee-note {
+  margin-top: 4px;
+  font-size: 0.76rem;
+  color: rgba(148, 163, 184, 0.9);
+}
 

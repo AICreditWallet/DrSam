@@ -58,7 +58,7 @@ export default function Home() {
 
             <button className="hero-prompt" type="button">
               <span className="hero-emoji">😊</span>
-              <span>How are you feeling today?</span>
+              <span>How are you feeling today? AI-Chat</span>
             </button>
           </div>
         </header>
@@ -106,19 +106,22 @@ export default function Home() {
 
         {/* ========================= FIXED BOTTOM BUTTONS ========================= */}
         <div className="bottom-fixed">
-          <div className="bottom-inner">
+  <div className="bottom-inner">
 
-            <button className="btn-emergency" type="button">
-              <span className="emergency-dot" />
-              <span>Emergency</span>
-            </button>
+    {/* Emergency goes to /emergency */}
+    <Link href="/emergency" className="btn-emergency">
+      <span className="emergency-dot" />
+      <span>Emergency</span>
+    </Link>
 
-            <button className="btn-book" type="button">
-              Book an appointment
-            </button>
+    {/* You can later wire this to a booking flow */}
+    <button className="btn-book" type="button">
+      Book an appointment
+    </button>
 
-          </div>
-        </div>
+  </div>
+</div>
+
         {/* ============================================================ */}
 
       </div>
