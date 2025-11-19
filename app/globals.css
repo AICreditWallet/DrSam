@@ -1629,3 +1629,21 @@ body {
 .dash-btn-ghost:hover {
   color: #f25b5b;
 }
+/* Home hero – darker header gradient */
+.home-hero {
+  background:
+    radial-gradient(circle at 0% 0%, #818cf8 0, transparent 55%),
+    radial-gradient(circle at 100% 0%, #38bdf8 0, transparent 55%),
+    linear-gradient(180deg, #1f2937 0%, #0f172a 100%);
+  color: #f9fafb;
+}
+
+/* Make sure text in the hero stays readable on the darker background */
+.home-hero h1,
+.home-hero h2,
+.home-hero h3,
+.home-hero p,
+.home-hero .brand-title,
+.home-hero .brand-subtitle {
+  color: #f9fafb;
+}

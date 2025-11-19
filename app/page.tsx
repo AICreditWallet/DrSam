@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <div className="app-root">
       {/* Main shell */}
-      <div className="app-shell">
+      <div className="app-shell home-hero">
         {/* Top gradient header */}
         <header className="header-hero">
           <div className="header-top">
