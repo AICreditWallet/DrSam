@@ -50,10 +50,45 @@ export default function Home() {
           <div className="hero-text-block">
             <h1 className="hero-heading">Consult a doctor instantly.</h1>
 
-            <button className="hero-prompt" type="button">
-              <span className="hero-emoji">🙂</span>
-              <span>How are you feeling today?</span>
-            </button>
+            {/* AI chat strip */}
+<section className="home-ai-chat">
+  <div className="home-ai-chat-main">
+    <div className="home-ai-chat-icon" aria-hidden="true">
+      🤖
+    </div>
+
+    <div className="home-ai-chat-copy">
+      <p className="home-ai-chat-title">Ask Dr. Sam (AI)</p>
+      <p className="home-ai-chat-subtitle">
+        Get quick, general medical information – not a diagnosis.
+      </p>
+    </div>
+  </div>
+
+  <form
+    className="home-ai-chat-form"
+    onSubmit={(e) => {
+      e.preventDefault();
+      // For now we don’t actually send anywhere – just a UI shell.
+      // Later you can wire this up to a real AI endpoint.
+    }}
+  >
+    <input
+      className="home-ai-chat-input"
+      type="text"
+      placeholder="Ask a health question…"
+    />
+    <button type="submit" className="home-ai-chat-button">
+      Chat
+    </button>
+  </form>
+
+  <p className="home-ai-chat-disclaimer">
+    For general information only. This is not personal medical advice.  
+    If you feel unwell or unsafe, please contact a doctor or emergency services.
+  </p>
+</section>
+
           </div>
         </header>
 
@@ -96,16 +131,7 @@ export default function Home() {
             </div>
           </section>
 
-          {/* How it works */}
-          <section className="info-card">
-            <div className="info-dot" />
-            <div>
-              <p className="info-title">How it works</p>
-              <p className="info-text">
-                Describe your symptoms, we match you with the right doctor.
-              </p>
-            </div>
-          </section>
+        
         </main>
       </div>
 
