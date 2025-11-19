@@ -105,22 +105,23 @@ export default function Home() {
 
 
         {/* ========================= FIXED BOTTOM BUTTONS ========================= */}
-        <div className="bottom-fixed">
-  <div className="bottom-inner">
+        import Link from "next/link"; // this is already at top of home page
 
-    {/* Emergency goes to /emergency */}
+// ...
+
+<div className="bottom-fixed">
+  <div className="bottom-inner">
     <Link href="/emergency" className="btn-emergency">
       <span className="emergency-dot" />
       <span>Emergency</span>
     </Link>
 
-    {/* You can later wire this to a booking flow */}
     <button className="btn-book" type="button">
       Book an appointment
     </button>
-
   </div>
 </div>
+
 
         {/* ============================================================ */}
 

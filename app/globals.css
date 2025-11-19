@@ -1975,4 +1975,214 @@ body {
   font-size: 0.76rem;
   color: rgba(148, 163, 184, 0.9);
 }
+/* ===========================
+   Emergency page styling
+   =========================== */
+
+.emerg-root {
+  min-height: 100vh;
+  padding: 24px 16px 32px;
+  background: radial-gradient(circle at top, #111827 0, #020617 55%, #000 100%);
+  color: #f9fafb;
+}
+
+.emerg-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.emerg-back {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  color: #e5e7eb;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.emerg-back:hover {
+  background: rgba(37, 99, 235, 0.95);
+}
+
+.emerg-title {
+  margin: 0 0 4px;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.emerg-subtitle {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+/* 999 / 111 warning */
+
+.emerg-warning {
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: #111827;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+}
+
+.emerg-warning-main {
+  margin: 0 0 4px;
+  font-weight: 600;
+}
+
+.emerg-warning-secondary {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #e5e7eb;
+}
+
+.emerg-warning a {
+  color: #93c5fd;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* body */
+
+.emerg-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.emerg-status {
+  font-size: 0.95rem;
+  color: #e5e7eb;
+}
+
+.emerg-status-error {
+  color: #fecaca;
+}
+
+/* doctor cards */
+
+.emerg-doctor-scroll {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scroll-snap-type: x mandatory;
+}
+
+.emerg-card {
+  scroll-snap-align: start;
+  flex: 0 0 85%;
+  max-width: 360px;
+  border-radius: 24px;
+  padding: 18px 16px 16px;
+  background: radial-gradient(circle at top, #1e293b 0, #020617 70%);
+  box-shadow: 0 22px 50px rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+@media (min-width: 768px) {
+  .emerg-card {
+    flex-basis: 320px;
+  }
+}
+
+.emerg-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.emerg-avatar-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  padding: 2px;
+  background: linear-gradient(135deg, #4f46e5, #38bdf8);
+}
+
+.emerg-avatar {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  overflow: hidden;
+  background: #020617;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emerg-avatar-initials {
+  color: #e5e7eb;
+  font-weight: 600;
+}
+
+.emerg-card-name {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.emerg-card-specialty {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+/* message box */
+
+.emerg-input-label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 10px 0 8px;
+  font-size: 0.9rem;
+  color: #e5e7eb;
+}
+
+.emerg-textarea {
+  resize: none;
+  min-height: 72px;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  padding: 10px 12px;
+  background: rgba(15, 23, 42, 0.95);
+  color: #f9fafb;
+  font-size: 0.9rem;
+}
+
+.emerg-textarea::placeholder {
+  color: #6b7280;
+}
+
+/* CTA + fee note */
+
+.emerg-message-btn {
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #4f46e5, #38bdf8);
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.emerg-message-btn:active {
+  transform: scale(0.98);
+}
+
+.emerg-fee-note {
+  margin: 8px 0 0;
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
 

@@ -15,23 +15,12 @@ type EmergencyDoctor = {
 
 function getEmergencyFeeText(feesJson: string | null): string | null {
   if (!feesJson) return null;
-
   try {
-    const parsed: any = JSON.parse(feesJson);
-
-    // Try a few reasonable keys from your earlier config
-    const candidates = [
-      parsed.emergency_default,
-      parsed.emergency,
-      parsed.weekend_night_emergency,
-      parsed.home_visit_emergency,
-    ].filter(Boolean);
-
-    if (candidates.length > 0) {
-      return `Emergency from ${candidates[0]}`;
-    }
-  } catch {
-    // ignore JSON errors – we’ll just hide the fee text
+    const parsed = JSON.parse(feesJson);
+    // if your fees JSON looks different, adjust this path
+    if (parsed?.emergency) return parsed.emergency;
+  } catch (err) {
+    console.error("Error parsing fees JSON", err);
   }
   return null;
 }
@@ -49,16 +38,25 @@ export default function EmergencyPage() {
       const { data, error } = await supabase
         .from("doctors")
         .select("id, full_name, specialty, avatar_url, fees, emergency_on")
-        .eq("emergency_on", true)
-        .order("full_name", { ascending: true });
+        .eq("emergency_on", true);
 
       if (error) {
         console.error(error);
-        setError("We couldn't load emergency doctors just now.");
-      } else {
-        setDoctors((data || []) as EmergencyDoctor[]);
+        setError("We couldn't load available emergency doctors right now.");
+        setLoading(false);
+        return;
       }
 
+      const mapped =
+        (data ?? []).map((row: any) => ({
+          id: row.id,
+          full_name: row.full_name,
+          specialty: row.specialty,
+          avatar_url: row.avatar_url,
+          fees: getEmergencyFeeText(row.fees),
+        })) ?? [];
+
+      setDoctors(mapped);
       setLoading(false);
     }
 
@@ -66,139 +64,102 @@ export default function EmergencyPage() {
   }, []);
 
   return (
-    <div className="app-root emergency-root">
-      <div className="app-shell emergency-shell">
-        {/* Header */}
-        <header className="emergency-header">
-          <div className="emergency-header-top">
-            <Link href="/" className="emergency-back">
-              ← Home
-            </Link>
-            <div className="emergency-title-block">
-              <h1 className="emergency-title">Emergency doctors</h1>
-              <p className="emergency-subtitle">
-                Connect with a doctor who has emergency availability right now.
-              </p>
-            </div>
-          </div>
+    <div className="emerg-root">
+      <header className="emerg-header">
+        <Link href="/" className="emerg-back">
+          ← Home
+        </Link>
 
-          {/* 111 / 999 info */}
-          <div className="emergency-warning">
-            <p className="emergency-warning-main">
-              If you are in immediate danger, please call{" "}
-              <a href="tel:999" className="emergency-link-strong">
-                999
-              </a>{" "}
-              now.
-            </p>
-            <p className="emergency-warning-secondary">
-              For urgent medical help that is not life-threatening, call{" "}
-              <a href="tel:111" className="emergency-link">
-                NHS 111
-              </a>
-              .
-            </p>
-          </div>
-        </header>
+        <div>
+          <h1 className="emerg-title">Emergency doctors</h1>
+          <p className="emerg-subtitle">
+            Connect with a doctor who is available for emergency care right now.
+          </p>
+        </div>
+      </header>
 
-        {/* Main content */}
-        <main className="emergency-main">
-          {loading && (
-            <div className="emergency-state">Loading available doctors…</div>
-          )}
+      <section className="emerg-warning">
+        <p className="emerg-warning-main">
+          If you are in immediate danger, please call{" "}
+          <a href="tel:999">999</a> now.
+        </p>
+        <p className="emerg-warning-secondary">
+          For urgent medical help that is not life-threatening, call{" "}
+          <a href="tel:111">NHS 111</a>.
+        </p>
+      </section>
 
-          {error && <div className="emergency-error">{error}</div>}
+      <main className="emerg-main">
+        {loading && <p className="emerg-status">Loading emergency doctors…</p>}
+        {error && (
+          <p className="emerg-status emerg-status-error">{error}</p>
+        )}
 
-          {!loading && !error && doctors.length === 0 && (
-            <div className="emergency-state">
-              No doctors have emergency available right now.
-            </div>
-          )}
+        {!loading && !error && doctors.length === 0 && (
+          <p className="emerg-status">
+            No doctors have emergency availability right now. If you’re worried
+            about your symptoms, please call <a href="tel:111">111</a>.
+          </p>
+        )}
 
-          {!loading && !error && doctors.length > 0 && (
-            <section
-              className="emergency-doctor-section"
-              aria-label="Doctors available for emergency"
-            >
-              <div className="emergency-doctor-scroll">
-                {doctors.map((doc) => {
-                  const feeText = getEmergencyFeeText(doc.fees);
-
-                  return (
-                    <article key={doc.id} className="emergency-card">
-                      <div className="emergency-card-top">
-                        <div className="emergency-avatar">
-                          {doc.avatar_url ? (
-                            <Image
-                              src={doc.avatar_url}
-                              alt={doc.full_name || "Doctor"}
-                              width={64}
-                              height={64}
-                              className="emergency-avatar-img"
-                            />
-                          ) : (
-                            <div className="emergency-avatar-fallback">
-                              {(doc.full_name || "Dr")
-                                .split(" ")
-                                .map((part) => part[0])
-                                .join("")
-                                .slice(0, 2)
-                                .toUpperCase()}
-                            </div>
-                          )}
-                        </div>
-
-                        <div className="emergency-card-info">
-                          <div className="emergency-card-name">
-                            {doc.full_name || "Doctor"}
-                          </div>
-                          {doc.specialty && (
-                            <div className="emergency-card-specialty">
-                              {doc.specialty}
-                            </div>
-                          )}
-                          {feeText && (
-                            <div className="emergency-card-fee">
-                              {feeText}
-                            </div>
-                          )}
-                        </div>
+        {doctors.length > 0 && (
+          <section aria-label="Doctors with emergency availability">
+            <div className="emerg-doctor-scroll">
+              {doctors.map((doc) => (
+                <article key={doc.id} className="emerg-card">
+                  <div className="emerg-card-header">
+                    <div className="emerg-avatar-wrap">
+                      <div className="emerg-avatar">
+                        {doc.avatar_url ? (
+                          <Image
+                            src={doc.avatar_url}
+                            alt={doc.full_name ?? "Doctor"}
+                            fill
+                            sizes="64px"
+                          />
+                        ) : (
+                          <span className="emerg-avatar-initials">
+                            {doc.full_name
+                              ?.split(" ")
+                              .map((p) => p[0])
+                              .join("") ?? "Dr"}
+                          </span>
+                        )}
                       </div>
+                    </div>
 
-                      {/* Message box – UI only for now */}
-                      <div className="emergency-message-block">
-                        <label className="emergency-message-label">
-                          Briefly describe what’s happening
-                        </label>
-                        <textarea
-                          className="emergency-message-input"
-                          rows={3}
-                          placeholder="E.g. sudden chest pain, breathing difficulty, high fever…"
-                        />
-                        <button
-                          type="button"
-                          className="emergency-message-send"
-                          onClick={() => {
-                            alert(
-                              "This is a preview. Messaging will be connected to your doctor account in the next step."
-                            );
-                          }}
-                        >
-                          Message doctor
-                        </button>
-                        <p className="emergency-fee-note">
-                          You’ll be charged according to this doctor’s
-                          emergency rate.
-                        </p>
-                      </div>
-                    </article>
-                  );
-                })}
-              </div>
-            </section>
-          )}
-        </main>
-      </div>
+                    <div>
+                      <h2 className="emerg-card-name">
+                        {doc.full_name ?? "Doctor"}
+                      </h2>
+                      <p className="emerg-card-specialty">
+                        {doc.specialty ?? "GP"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <label className="emerg-input-label">
+                    Briefly describe what’s happening
+                    <textarea
+                      className="emerg-textarea"
+                      placeholder="E.g. sudden chest pain, trouble breathing, high fever…"
+                    />
+                  </label>
+
+                  <button type="button" className="emerg-message-btn">
+                    Message doctor
+                  </button>
+
+                  <p className="emerg-fee-note">
+                    You’ll be charged according to this doctor’s emergency rate
+                    {doc.fees ? ` (${doc.fees})` : ""}.
+                  </p>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
+      </main>
     </div>
   );
 }
