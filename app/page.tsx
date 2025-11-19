@@ -51,7 +51,19 @@ export default function Home() {
               </Link>
             </div>
           </div>
+<div className="top-buttons">
+  <Link href="/signin" className="btn-outline">
+    Doctor sign in
+  </Link>
 
+  <Link href="/create-account" className="btn-filled">
+    Doctor account
+  </Link>
+
+  <Link href="/patient/create-account" className="btn-outline secondary">
+    Patient account
+  </Link>
+</div>
           {/* HERO TEXT + PROMPT */}
           <div className="hero-text-block">
             <h1 className="hero-heading">Consult a doctor instantly.</h1>
